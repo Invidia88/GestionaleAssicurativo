@@ -38,6 +38,10 @@
   `Invidia88/GestionaleAssicurativo` per il primo versionamento.
 - branch permanente `staging` affiancato a `main`, con corrispondenza documentata
   verso i due progetti Supabase.
+- progetto Vercel rinominato `gestionale-assicurativo`, configurato come Next.js
+  e collegato al repository GitHub ufficiale;
+- risoluzione centralizzata dell'URL pubblico per locale, Preview e Production;
+- 4 test unitari dedicati agli URL di redirect Vercel.
 
 ### Modificato
 
@@ -50,12 +54,16 @@
 - branch locale iniziale rinominato da `master` a `main`.
 - flusso di rilascio definito come promozione tramite pull request da `staging`
   a `main`, senza push diretti ordinari su Production.
+- variabili Supabase pubbliche di Staging limitate ai soli deployment Preview
+  del branch `staging`.
 
 ### Corretto
 
 - copertura degli indici per le chiavi esterne composte segnalate dagli advisor.
 - conflitto porte con un altro progetto Supabase locale senza interromperlo.
 - verifica del profilo post-login resa univoca tramite UUID Auth.
+- lockfile npm corretto eliminando una dipendenza facoltativa priva di versione,
+  che impediva l'installazione pulita su Vercel.
 
 ### Documentazione
 
@@ -69,4 +77,6 @@
 ### Problemi aperti
 
 - valutare l'attivazione della protezione Auth dalle password compromesse;
-- configurazione Vercel e collaudo del deployment ancora da completare.
+- inserire manualmente `SUPABASE_SECRET_KEY` in `Preview (staging)` su Vercel;
+- aggiungere l'alias stabile Preview alla allow-list Auth Staging e completare
+  il collaudo end-to-end.

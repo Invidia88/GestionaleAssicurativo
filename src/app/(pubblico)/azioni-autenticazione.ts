@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { creaClientSupabaseServer } from "@/lib/supabase/server";
+import { ottieniUrlSito } from "@/lib/url-sito";
 
 export type StatoAutenticazione = {
   messaggio?: string;
@@ -38,17 +39,6 @@ const schemaNuovaPassword = z
 
 function erroriCampi(errore: z.ZodError): StatoAutenticazione["errori"] {
   return errore.flatten().fieldErrors;
-}
-
-function urlPubblico() {
-  const configurato = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-
-  if (configurato) {
-    return configurato.replace(/\/$/, "");
-  }
-
-  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
-  return vercel ? `https://${vercel}` : "http://localhost:3000";
 }
 
 export async function accedi(
@@ -104,7 +94,7 @@ export async function richiediRecuperoPassword(
   }
 
   const supabase = await creaClientSupabaseServer();
-  const destinazione = `${urlPubblico()}/auth/conferma?successivo=/aggiorna-password`;
+  const destinazione = `${ottieniUrlSito()}/auth/conferma?successivo=/aggiorna-password`;
   const { error } = await supabase.auth.resetPasswordForEmail(
     validazione.data.email,
     { redirectTo: destinazione },

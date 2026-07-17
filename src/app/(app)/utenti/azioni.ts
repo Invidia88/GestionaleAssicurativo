@@ -6,6 +6,7 @@ import { z } from "zod";
 import { richiediAmministratoreCorrente } from "@/lib/autenticazione";
 import { creaClientSupabaseAmministratore } from "@/lib/supabase/amministratore";
 import { creaClientSupabaseServer } from "@/lib/supabase/server";
+import { ottieniUrlSito } from "@/lib/url-sito";
 import { ruoliUtente, schemaInvitoUtente, type DatiInvitoUtente } from "@/lib/validazioni";
 
 export async function invitaUtente(dati: DatiInvitoUtente) {
@@ -14,9 +15,8 @@ export async function invitaUtente(dati: DatiInvitoUtente) {
   if (!validazione.success) return { successo: false, errori: validazione.error.flatten().fieldErrors };
 
   const amministratore = creaClientSupabaseAmministratore();
-  const sito = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const { data: invito, error: erroreInvito } = await amministratore.auth.admin.inviteUserByEmail(validazione.data.email, {
-    redirectTo: `${sito}/auth/conferma?successivo=/aggiorna-password`,
+    redirectTo: `${ottieniUrlSito()}/auth/conferma?successivo=/aggiorna-password`,
     data: { nome: validazione.data.nome, cognome: validazione.data.cognome },
   });
 

@@ -633,3 +633,45 @@ Creare un flusso GitHub a due branch coerente con gli ambienti Supabase.
 
 Flusso di sviluppo pronto: le prossime fix e feature partono da `staging` e
 raggiungono `main` soltanto dopo collaudo e pull request.
+
+## 2026-07-17 15:00 CEST
+
+### Obiettivo
+
+Configurare Vercel per il branch `staging` e ottenere il primo Preview Next.js.
+
+### Operazioni eseguite
+
+- autenticata la CLI Vercel con l'account `invidia88`;
+- rinominato il progetto esistente da `gestionale-assicurazioni` a
+  `gestionale-assicurativo`, preservandone la cronologia;
+- sostituito il preset Vite con Next.js e ripristinato il rilevamento automatico;
+- sostituito il vecchio collegamento Git con
+  `Invidia88/GestionaleAssicurativo`;
+- caricate URL e Publishable Key Supabase soltanto in `Preview (staging)`;
+- eseguito un primo deploy, individuato l'errore `npm Invalid Version` e
+  ricondotto a una voce facoltativa incompleta nel lockfile;
+- riparato e ricostruito canonicamente `package-lock.json`;
+- completato con successo un deployment Preview Vercel;
+- unificata la scelta dell'URL pubblico per recupero password e inviti.
+
+### Sicurezza
+
+- nessun valore segreto mostrato nei log o versionato;
+- trasferimento automatico della Secret Key bloccato e sostituito con inserimento
+  manuale nella dashboard Vercel;
+- nessuna variabile Production configurata e nessun deploy di `main` eseguito;
+- Supabase Production non modificato.
+
+### Verifiche
+
+- zero voci del lockfile prive di versione;
+- simulazione `npm ci --ignore-scripts --dry-run` superata;
+- deployment Preview in stato `READY`;
+- 15 test unitari, lint, typecheck e build Next.js superati.
+
+### Problemi aperti
+
+- completare il deployment automatico generato dal push GitHub su `staging`;
+- aggiungere l'alias Preview alla allow-list Auth Supabase Staging;
+- inserire manualmente la Secret Key Staging in Vercel per abilitare gli inviti.

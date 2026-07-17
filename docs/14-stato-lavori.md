@@ -36,21 +36,25 @@
 
 ## In corso
 
-- nessuna attività in corso.
+- configurazione del progetto Vercel e delle variabili Preview limitate al
+  branch `staging`;
+- primo deploy e collaudo end-to-end dell'ambiente Staging.
 
 ## Da fare
 
-- configurazione progetto e variabili su Vercel;
-- deploy e collaudo dell'ambiente Staging Vercel.
+- configurazione delle variabili Production prima del primo rilascio su `main`;
+- primo deploy Production, solo dopo promozione esplicita e migration verificata.
 
 ## Problemi aperti
 
 - nessun problema bloccante;
+- la Secret Key Staging deve essere aggiunta manualmente a Vercel con ambito
+  `Preview (staging)` prima di collaudare gli inviti utenti;
 - resta un warning non bloccante della cache sperimentale CLI `pg-delta`.
 - l'advisor Auth segnala che la protezione dalle password compromesse è
   disattivata.
 
 ## Prossima attività
 
-Configurare Vercel affinché `staging` usi Supabase Staging e `main` usi
-Supabase Production, quindi collaudare il primo deployment Staging.
+Pubblicare il commit su `staging`, verificare il deployment automatico GitHub e
+aggiungere il relativo alias alla allow-list Auth Supabase Staging.
