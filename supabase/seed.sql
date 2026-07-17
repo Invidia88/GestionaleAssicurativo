@@ -1,0 +1,2 @@
+-- I dati dimostrativi non vengono caricati automaticamente in locale.
+-- Lo script server-side dedicato opera esclusivamente sul progetto Staging.
