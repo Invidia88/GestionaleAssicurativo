@@ -53,16 +53,20 @@
   ricerca, filtro e preventivo WhatsApp;
 - 23 test unitari, 49 test RLS, lint, typecheck e build superati;
 - isolamento Aurora/Tirreno e layout desktop/mobile della nuova pagina verificati.
+- database Supabase Production inizializzato esclusivamente con le tre
+  migration versionate: sei tabelle con RLS e nessun utente o dato demo;
+- variabili Vercel Production configurate con Publishable Key pubblica e
+  Secret Key server-side ruotata.
 
 ## In corso
 
-- pubblicazione della sezione `Scaduti` sul Preview Staging;
-- preparazione controllata del primo rilascio Production con database vuoto.
+- promozione controllata del branch `staging` verso `main` e verifica del
+  deployment Production.
 
 ## Da fare
 
-- configurazione delle variabili Production prima del primo rilascio su `main`;
-- primo deploy Production, solo dopo promozione esplicita e migration verificata.
+- creare l'account Auth del proprietario Production e attivare la prima agenzia
+  cliente dal pannello piattaforma.
 
 ## Problemi aperti
 
@@ -75,5 +79,5 @@
 
 ## Prossima attività
 
-Completare `Scaduti` su Staging, verificare il database Production ancora vuoto,
-applicare soltanto le migration e promuovere `staging` verso `main`.
+Promuovere `staging` verso `main`, verificare l'alias Production e creare il
+primo accesso proprietario, poi guidare l'onboarding della prima agenzia.

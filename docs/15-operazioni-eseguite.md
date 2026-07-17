@@ -849,3 +849,30 @@ primo rilascio Production senza dati dimostrativi.
 - browser autenticato Aurora: 3 polizze scadute visibili e nessun dato Tirreno;
 - desktop 1280 px e smartphone 390 px senza overflow o overlay Next.js;
 - azioni della tabella compattate dopo la verifica visuale su portatile.
+
+## 2026-07-17 17:42 CEST
+
+### Obiettivo
+
+Preparare Supabase Production per il primo rilascio, mantenendolo privo di
+utenti e dati delle agenzie.
+
+### Configurazione e verifiche
+
+- l'utente ha ruotato la Secret Key di Production e l'ha impostata su Vercel
+  come variabile sensibile, senza esporne il valore nel repository;
+- presenti su Vercel Production: URL Supabase, Publishable Key, Secret Key,
+  email proprietario e URL pubblico dell'app;
+- prima dell'intervento: `0` utenti Auth e `0` tabelle applicative;
+- applicate soltanto le tre migration versionate, senza eseguire seed;
+- dopo l'intervento: sei tabelle applicative, RLS attivo su tutte e zero righe
+  in `agenzie`, `utenti`, `clienti`, `compagnie`, `polizze` e `contatti`;
+- migration locale e remota allineate;
+- advisor Production eseguito: soltanto segnalazioni informative di indici non
+  ancora usati, attese per un database nuovo e vuoto.
+
+### Nota tecnica
+
+La CLI ha emesso un warning non bloccante relativo alla cache sperimentale
+`pg-delta` dopo il push; lo storico migration remoto e le verifiche SQL
+confermano che le migration sono state applicate correttamente.

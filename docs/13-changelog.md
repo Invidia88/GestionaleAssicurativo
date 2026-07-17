@@ -53,6 +53,8 @@
   prossimità della successiva ricorrenza annuale;
 - finestra operativa di 14 giorni, ricerca e azione WhatsApp per proporre un
   nuovo preventivo.
+- schema iniziale Production applicato dalle tre migration versionate, senza
+  seed, utenti Auth o dati dimostrativi.
 
 ### Modificato
 
@@ -84,6 +86,7 @@
   sessione diversa;
 - query dashboard filtrate esplicitamente per l'agenzia verificata, in aggiunta
   alle policy RLS del database.
+- chiave server-side Production ruotata prima della configurazione Vercel.
 
 ### Documentazione
 
@@ -93,6 +96,7 @@
 - documentati e verificati modifica, eliminazione e rinnovo delle polizze.
 - documentato il completamento frontend e il nuovo sistema visivo.
 - documentata e verificata la preferenza locale della modalità scura.
+- registrata l'inizializzazione verificata del database Production vuoto.
 
 ### Problemi aperti
 
