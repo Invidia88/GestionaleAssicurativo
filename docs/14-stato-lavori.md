@@ -39,10 +39,13 @@
 - email proprietario configurata su locale e Vercel Preview del branch
   `staging`;
 - 47 test database, 16 test unitari, lint, typecheck e build superati.
+- commit `4ba3124` pubblicato su `staging` e Preview Vercel in stato `READY`;
+- alias gratuito stabile aggiornato al deployment del pannello proprietario;
+- route login verificata con HTTP 200 e pannello anonimo con redirect HTTP 307
+  al login.
 
 ## In corso
 
-- pubblicazione del pannello sul branch `staging` e verifica del Preview Vercel;
 - collaudo autenticato della creazione di una nuova agenzia di prova.
 
 ## Da fare
@@ -61,5 +64,5 @@
 
 ## Prossima attività
 
-Pubblicare il commit su `staging`, attendere il Preview automatico e collaudare
-il pannello autenticato, senza modificare Production.
+Accedere allo Staging con l’account proprietario e collaudare la creazione di
+una nuova agenzia reale o di prova, senza modificare Production.

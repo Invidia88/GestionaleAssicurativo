@@ -89,3 +89,10 @@
 
 - valutare l'attivazione della protezione Auth dalle password compromesse;
 - completare il collaudo autenticato del pannello sul nuovo Preview Vercel.
+
+### Distribuzione Staging
+
+- commit del pannello pubblicato sul branch `staging`;
+- Preview Vercel completato in stato `READY` e alias stabile aggiornato;
+- route pubblica e protezione anonima del pannello verificate via HTTP;
+- `main`, Supabase Production e variabili Vercel Production invariati.

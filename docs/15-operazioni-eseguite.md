@@ -729,3 +729,27 @@ proprietario della piattaforma.
   superati;
 - accesso anonimo a `/piattaforma/agenzie` reindirizzato correttamente al login;
 - pagina caricata senza overlay o errori console nella verifica browser locale.
+
+## 2026-07-17 16:23 CEST
+
+### Pubblicazione Staging
+
+- creato il commit `4ba3124` (`Add platform agency management`);
+- pubblicato esclusivamente su `origin/staging`;
+- nessuna pull request aperta verso `main` e nessuna operazione Production;
+- deployment GitHub automatico completato in stato `READY`;
+- deployment univoco:
+  `gestionale-assicurativo-nvoyxzlcz-invidiaa88.vercel.app`;
+- alias stabile assegnato:
+  `gestionale-assicurativo-git-staging-invidiaa88.vercel.app`;
+- build Vercel confermata con le route `/piattaforma` e
+  `/piattaforma/agenzie` incluse;
+- `/login` verificata con HTTP 200 tramite bypass autorizzato della protezione
+  Preview;
+- `/piattaforma/agenzie` senza sessione verificata con HTTP 307 verso il login.
+
+### Attività manuale residua
+
+Accedere all’alias Staging con l’account proprietario e creare una prima agenzia
+di prova usando un indirizzo amministratore controllato. L’operazione invierà
+realmente un’email e pertanto non è stata eseguita automaticamente.
