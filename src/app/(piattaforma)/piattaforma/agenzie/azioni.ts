@@ -28,7 +28,7 @@ export async function creaAgenzia(dati: DatiNuovaAgenzia) {
   const emailAmministratore = valori.emailAmministratore.toLowerCase();
   const { data: invito, error: erroreInvito } =
     await amministratore.auth.admin.inviteUserByEmail(emailAmministratore, {
-      redirectTo: `${ottieniUrlSito()}/auth/conferma?successivo=/aggiorna-password`,
+      redirectTo: `${ottieniUrlSito()}/auth/invito`,
       data: {
         nome: valori.nomeAmministratore,
         cognome: valori.cognomeAmministratore,

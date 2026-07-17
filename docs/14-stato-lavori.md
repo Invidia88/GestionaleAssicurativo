@@ -43,10 +43,14 @@
 - alias gratuito stabile aggiornato al deployment del pannello proprietario;
 - route login verificata con HTTP 200 e pannello anonimo con redirect HTTP 307
   al login.
+- callback browser dedicato agli inviti e scelta password obbligatoria
+  implementati;
+- isolamento dashboard ricollaudato con 49 test pgTAP e filtri tenant espliciti;
+- 20 test unitari, lint, typecheck, build e verifica browser locale superati.
 
 ## In corso
 
-- collaudo autenticato della creazione di una nuova agenzia di prova.
+- pubblicazione della correzione sul branch e Preview Staging.
 
 ## Da fare
 
@@ -64,5 +68,6 @@
 
 ## Prossima attività
 
-Accedere allo Staging con l’account proprietario e collaudare la creazione di
-una nuova agenzia reale o di prova, senza modificare Production.
+Pubblicare la correzione su Staging e collaudare un nuovo invito. Per un invito
+già aperto prima della correzione, usare il recupero password perché il link
+monouso potrebbe essere già stato consumato.

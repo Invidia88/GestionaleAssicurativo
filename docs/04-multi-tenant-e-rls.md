@@ -35,9 +35,14 @@ autenticati continuano a valere grant, RLS e chiavi composte del chiamante.
 
 ## Verifica
 
-Le policy e il rinnovo sono coperti da 39 test pgTAP. I test simulano ruoli JWT reali,
+Le policy e il rinnovo sono coperti da test pgTAP. I test simulano ruoli JWT reali,
 inserimenti cross-tenant, modifica di `agenzia_id`, permessi dei collaboratori,
 gestione amministratore ed eliminazioni con vincoli.
+
+La dashboard usa il client Supabase della sessione corrente. Ogni lettura resta
+protetta dalle policy RLS e include anche un filtro esplicito con l'`agenzia_id`
+del profilo verificato. La suite controlla separatamente che l'amministratore
+dell'Agenzia B veda una sola polizza e nessuna polizza dell'Agenzia A.
 
 Su Staging risultano sei tabelle con RLS, 19 policy e nessun grant assegnato al
 ruolo `anon`. Gli advisor non segnalano problemi allo schema; resta un avviso

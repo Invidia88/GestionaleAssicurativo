@@ -48,7 +48,7 @@
   caso di errore database;
 - migration con indice univoco parziale e funzione atomica riservata al
   `service_role`;
-- 47 test database e 16 test unitari complessivi.
+- 49 test database e 20 test unitari complessivi.
 
 ### Modificato
 
@@ -75,6 +75,11 @@
 - verifica del profilo post-login resa univoca tramite UUID Auth.
 - lockfile npm corretto eliminando una dipendenza facoltativa priva di versione,
   che impediva l'installazione pulita su Vercel.
+- callback degli inviti separato dal recupero PKCE, così il nuovo utente viene
+  portato alla scelta della password anche se nel browser esiste già una
+  sessione diversa;
+- query dashboard filtrate esplicitamente per l'agenzia verificata, in aggiunta
+  alle policy RLS del database.
 
 ### Documentazione
 
@@ -88,7 +93,7 @@
 ### Problemi aperti
 
 - valutare l'attivazione della protezione Auth dalle password compromesse;
-- completare il collaudo autenticato del pannello sul nuovo Preview Vercel.
+- collaudare un nuovo invito reale dopo il deployment della correzione Staging.
 
 ### Distribuzione Staging
 

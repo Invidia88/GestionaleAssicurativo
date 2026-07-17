@@ -34,6 +34,8 @@ L'autenticazione usa sessioni Supabase SSR memorizzate in cookie e comprende:
 - `/login` con email e password, senza collegamento di registrazione;
 - `/recupera-password` e `/aggiorna-password` per il recupero guidato;
 - `/auth/conferma` per completare il flusso PKCE inviato via email;
+- `/auth/invito` per acquisire la sessione implicita degli inviti amministrativi
+  e obbligare il destinatario a scegliere la password prima dell'accesso;
 - refresh della sessione tramite `src/proxy.ts`;
 - controllo autorevole con `getClaims()` e verifica del profilo attivo nel
   layout privato;
@@ -71,3 +73,10 @@ profilo fallisce, l'identità appena invitata viene rimossa.
 viene mai restituita al browser. L'URL dell'invito usa
 `NEXT_PUBLIC_SITE_URL`: in locale vale `http://localhost:3000`, mentre su Vercel
 usa l'alias gratuito stabile dello Staging.
+
+Gli inviti generati da `inviteUserByEmail` non usano PKCE: Supabase restituisce
+la sessione nel frammento URL, leggibile soltanto dal browser. Per questo gli
+inviti non passano dal route handler PKCE del recupero password, ma dalla pagina
+client dedicata `/auth/invito`. La pagina salva la sessione nei cookie SSR,
+rimuove i token dall'indirizzo e apre sempre `/aggiorna-password`; non usa
+un'eventuale sessione già presente nel browser come prova di invito.

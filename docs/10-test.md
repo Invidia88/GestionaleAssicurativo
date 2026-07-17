@@ -19,7 +19,7 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 ## Ultimo risultato
 
 - `supabase db reset --local`: superato;
-- 47 test pgTAP locali: superati;
+- 49 test pgTAP locali: superati;
 - database lint: nessun errore;
 - advisor schema e prestazioni: nessun warning; resta l'avviso Auth sulla
   protezione dalle password compromesse;
@@ -28,7 +28,8 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 - seed Staging eseguito due volte senza duplicati;
 - verifica remota seed: 2 agenzie, 4 utenti, 10 compagnie, 30 clienti, 40
   polizze e 16 contatti;
-- 16 test unitari superati per scadenze, URL, telefono, WhatsApp e validazioni di
+- 20 test unitari superati per callback inviti, scadenze, URL, telefono,
+  WhatsApp e validazioni di
   clienti, compagnie, polizze, contatti, impostazioni e inviti;
 - login amministratore Staging e lettura RLS delle 20 polizze Aurora superati;
 - pagina login verificata a 390 px senza overflow, overlay o errori browser.

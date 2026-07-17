@@ -16,7 +16,7 @@ export async function invitaUtente(dati: DatiInvitoUtente) {
 
   const amministratore = creaClientSupabaseAmministratore();
   const { data: invito, error: erroreInvito } = await amministratore.auth.admin.inviteUserByEmail(validazione.data.email, {
-    redirectTo: `${ottieniUrlSito()}/auth/conferma?successivo=/aggiorna-password`,
+    redirectTo: `${ottieniUrlSito()}/auth/invito`,
     data: { nome: validazione.data.nome, cognome: validazione.data.cognome },
   });
 

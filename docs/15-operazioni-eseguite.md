@@ -753,3 +753,43 @@ proprietario della piattaforma.
 Accedere all’alias Staging con l’account proprietario e creare una prima agenzia
 di prova usando un indirizzo amministratore controllato. L’operazione invierà
 realmente un’email e pertanto non è stata eseguita automaticamente.
+
+## 2026-07-17 16:35 CEST
+
+### Obiettivo
+
+Correggere il completamento degli inviti e ricollaudare l'isolamento delle
+dashboard tra agenzie.
+
+### Diagnosi
+
+- `inviteUserByEmail` restituisce una sessione tramite frammento URL e non
+  supporta il flusso PKCE;
+- il callback esistente accettava soltanto `code`, quindi perdeva la sessione
+  dell'invitato durante il redirect;
+- se nel browser era già presente la sessione proprietario, il successivo
+  accesso al login apriva la dashboard di quella sessione;
+- le query dashboard usavano già il client utente con RLS, senza client
+  amministrativo, ma verranno anche filtrate esplicitamente per agenzia.
+
+### Intervento previsto
+
+- aggiungere `/auth/invito` come pagina browser dedicata alla sessione implicita;
+- indirizzare a questa pagina tutti i nuovi inviti iniziali e collaboratori;
+- aprire sempre il modulo nuova password dopo la sessione dell'invitato;
+- aggiungere filtri tenant espliciti alla dashboard e test pgTAP dedicati;
+- applicare e pubblicare la correzione soltanto su Staging.
+
+### Implementazione e verifiche
+
+- creata la pagina `/auth/invito`, capace di acquisire sessione implicita,
+  `token_hash` o codice senza fidarsi di una sessione browser preesistente;
+- aggiornati gli inviti del primo amministratore e dei collaboratori;
+- aggiunto il filtro `agenzia_id` verificato alle letture della dashboard;
+- aggiunti quattro test unitari callback e due test RLS dashboard;
+- 20 test unitari e 49 test pgTAP superati;
+- ESLint, TypeScript, build Next.js e `git diff --check` superati;
+- route `/auth/invito` presente nella build;
+- verifica browser locale superata: contenuto presente, nessun overlay di errore
+  e rifiuto corretto di un URL privo di credenziali d'invito;
+- nessuna migration o modifica ai dati Staging e Production.

@@ -46,7 +46,7 @@ type PolizzaDashboard = {
   compagnia: { nome: string };
 };
 
-async function caricaPolizze(): Promise<{
+async function caricaPolizze(agenziaId: string): Promise<{
   polizze: PolizzaDashboard[];
   errore: string | null;
 }> {
@@ -54,6 +54,7 @@ async function caricaPolizze(): Promise<{
   const { data: polizze, error } = await supabase
     .from("polizze")
     .select("id, cliente_id, compagnia_id, tipo, data_scadenza, stato")
+    .eq("agenzia_id", agenziaId)
     .eq("stato", "attiva")
     .order("data_scadenza", { ascending: true })
     .limit(50);
@@ -72,8 +73,13 @@ async function caricaPolizze(): Promise<{
     supabase
       .from("clienti")
       .select("id, nome, cognome, telefono")
+      .eq("agenzia_id", agenziaId)
       .in("id", idClienti),
-    supabase.from("compagnie").select("id, nome").in("id", idCompagnie),
+    supabase
+      .from("compagnie")
+      .select("id, nome")
+      .eq("agenzia_id", agenziaId)
+      .in("id", idCompagnie),
   ]);
 
   if (rispostaClienti.error || rispostaCompagnie.error) {
@@ -118,10 +124,8 @@ const riepiloghi = [
 ] as const;
 
 export default async function Dashboard() {
-  const [profilo, risultato] = await Promise.all([
-    richiediProfiloCorrente(),
-    caricaPolizze(),
-  ]);
+  const profilo = await richiediProfiloCorrente();
+  const risultato = await caricaPolizze(profilo.agenziaId);
 
   const righe = risultato.polizze.map((polizza) => ({
     ...polizza,

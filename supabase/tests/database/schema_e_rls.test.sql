@@ -1,6 +1,6 @@
 begin;
 
-select plan(47);
+select plan(49);
 
 -- Struttura pubblica: esistono soltanto le sei tabelle applicative previste.
 select has_table('public', 'agenzie', 'esiste la tabella agenzie');
@@ -393,6 +393,22 @@ select is(
   (select privato.ruolo_utente_corrente()),
   'amministratore',
   'la funzione privata restituisce il ruolo corrente'
+);
+
+select is(
+  (select count(*)::integer from public.polizze),
+  1,
+  'la dashboard dell’amministratore vede soltanto le polizze della propria agenzia'
+);
+
+select is(
+  (
+    select count(*)::integer
+    from public.polizze
+    where agenzia_id = '10000000-0000-0000-0000-000000000001'
+  ),
+  0,
+  'la dashboard non vede polizze appartenenti a un’altra agenzia'
 );
 
 select isnt_empty(
