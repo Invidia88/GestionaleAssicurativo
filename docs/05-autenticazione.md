@@ -3,13 +3,16 @@
 Supabase Auth gestisce email, password, recupero password e sessioni. Non esiste
 registrazione pubblica.
 
-## Primo amministratore
+## Proprietario della piattaforma e primo amministratore
 
-1. creare o invitare l'utente da Supabase Dashboard;
-2. copiare il suo UUID senza condividere password;
-3. eseguire la transazione documentata per creare agenzia e profilo
-   `amministratore`;
-4. verificare l'accesso e le policy.
+Non esiste registrazione pubblica. Il proprietario accede con il proprio account
+Auth e può aprire `/piattaforma/agenzie` soltanto se la sua email corrisponde a
+`PIATTAFORMA_PROPRIETARIO_EMAIL`, variabile server-side.
+
+Dal pannello il proprietario inserisce i dati dell'agenzia e del suo primo
+amministratore. L'app invia un invito email; il destinatario sceglie la propria
+password e accede al gestionale. Ogni agenzia può avere un solo amministratore.
+L'amministratore invita successivamente soltanto collaboratori.
 
 Gli utenti successivi saranno invitati da una Server Action riservata agli
 amministratori. La secret key resterà esclusivamente lato server.
@@ -67,4 +70,4 @@ profilo fallisce, l'identità appena invitata viene rimossa.
 `SUPABASE_SECRET_KEY` è letta esclusivamente da un modulo `server-only` e non
 viene mai restituita al browser. L'URL dell'invito usa
 `NEXT_PUBLIC_SITE_URL`: in locale vale `http://localhost:3000`, mentre su Vercel
-dovrà contenere il dominio dello Staging.
+usa l'alias gratuito stabile dello Staging.

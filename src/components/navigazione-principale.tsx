@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  PanelsTopLeft,
   Settings,
   ShieldCheck,
   Users,
@@ -43,20 +44,33 @@ const vociAmministratore = [
   { href: "/impostazioni", etichetta: "Impostazioni", Icona: Settings },
 ];
 
+const vocePiattaforma = {
+  href: "/piattaforma/agenzie",
+  etichetta: "Piattaforma",
+  Icona: PanelsTopLeft,
+};
+
 type NavigazioneProps = {
   amministratore: boolean;
   nomeAgenzia: string;
+  proprietarioPiattaforma: boolean;
 };
 
 function ElencoVoci({
   amministratore,
+  proprietarioPiattaforma,
   mobile = false,
 }: {
   amministratore: boolean;
+  proprietarioPiattaforma: boolean;
   mobile?: boolean;
 }) {
   const pathname = usePathname();
-  const elenco = amministratore ? [...voci, ...vociAmministratore] : voci;
+  const elenco = amministratore ? [...voci, ...vociAmministratore] : [...voci];
+
+  if (proprietarioPiattaforma) {
+    elenco.push(vocePiattaforma);
+  }
 
   return (
     <nav aria-label="Navigazione principale" className="space-y-1">
@@ -89,7 +103,7 @@ function ElencoVoci({
   );
 }
 
-export function Sidebar({ amministratore, nomeAgenzia }: NavigazioneProps) {
+export function Sidebar({ amministratore, nomeAgenzia, proprietarioPiattaforma }: NavigazioneProps) {
   return (
     <aside className="m-3 hidden h-[calc(100vh-1.5rem)] w-72 shrink-0 rounded-2xl border bg-sidebar p-4 shadow-sm lg:sticky lg:top-3 lg:flex lg:flex-col">
       <Link href="/dashboard" className="flex items-center gap-3 px-2 py-2">
@@ -107,7 +121,7 @@ export function Sidebar({ amministratore, nomeAgenzia }: NavigazioneProps) {
       </Link>
       <Separator className="my-4" />
       <div className="flex-1">
-        <ElencoVoci amministratore={amministratore} />
+        <ElencoVoci amministratore={amministratore} proprietarioPiattaforma={proprietarioPiattaforma} />
       </div>
       <Separator className="my-4" />
       <form action={esci}>
@@ -120,7 +134,7 @@ export function Sidebar({ amministratore, nomeAgenzia }: NavigazioneProps) {
   );
 }
 
-export function MenuMobile({ amministratore, nomeAgenzia }: NavigazioneProps) {
+export function MenuMobile({ amministratore, nomeAgenzia, proprietarioPiattaforma }: NavigazioneProps) {
   const [aperto, setAperto] = useState(false);
 
   return (
@@ -142,7 +156,7 @@ export function MenuMobile({ amministratore, nomeAgenzia }: NavigazioneProps) {
           <SheetDescription className="truncate">{nomeAgenzia}</SheetDescription>
         </SheetHeader>
         <div className="flex-1 px-3">
-          <ElencoVoci amministratore={amministratore} mobile />
+          <ElencoVoci amministratore={amministratore} proprietarioPiattaforma={proprietarioPiattaforma} mobile />
         </div>
         <SheetFooter className="border-t">
           <form action={esci}>

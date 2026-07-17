@@ -3,6 +3,16 @@
 L'interfaccia usa etichette italiane, card su smartphone e tabelle compatte su
 desktop. UUID e `agenzia_id` non compaiono mai nei moduli.
 
+## Pannello proprietario
+
+La pagina `/piattaforma/agenzie` è separata dal gestionale della singola
+agenzia. Mostra l'elenco dei tenant con stato e amministratore, un modulo breve
+per creare agenzia e invito iniziale e una conferma esplicita per attivare o
+disattivare un'agenzia. Le agenzie non vengono eliminate dall'interfaccia.
+
+Il pannello è visibile nella navigazione soltanto all'email del proprietario e
+resta protetto server-side anche conoscendone l'indirizzo.
+
 Ogni eliminazione di cliente, compagnia o polizza usa un `AlertDialog` con nome
 del record, conseguenze e pulsanti `Annulla` e `Elimina`. Un vincolo di relazione
 viene tradotto in un messaggio comprensibile che indica cosa gestire prima.
@@ -79,7 +89,7 @@ Il blocco finale completa le schermate previste dal brief:
 
 - modifica ed eliminazione protetta dei clienti;
 - registrazione del contatto dalla polizza e storico filtrabile;
-- invito, ruolo e attivazione degli utenti per gli amministratori;
+- invito di collaboratori e attivazione degli utenti per gli amministratori;
 - impostazioni essenziali dell'agenzia e del messaggio WhatsApp.
 
 Gli inviti utenti usano la Secret Key soltanto server-side. Tutte le altre

@@ -5,6 +5,39 @@ import { redirect } from "next/navigation";
 
 import { creaClientSupabaseServer } from "@/lib/supabase/server";
 
+function emailProprietarioConfigurata() {
+  return process.env.PIATTAFORMA_PROPRIETARIO_EMAIL?.trim().toLowerCase() || null;
+}
+
+export function emailAutorizzataPiattaforma(email: string | null | undefined) {
+  const proprietario = emailProprietarioConfigurata();
+  return Boolean(proprietario && email?.trim().toLowerCase() === proprietario);
+}
+
+export const trovaProprietarioPiattaforma = cache(async () => {
+  const supabase = await creaClientSupabaseServer();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error || !data.user || !emailAutorizzataPiattaforma(data.user.email)) {
+    return null;
+  }
+
+  return {
+    id: data.user.id,
+    email: data.user.email!,
+  };
+});
+
+export async function richiediProprietarioPiattaforma() {
+  const proprietario = await trovaProprietarioPiattaforma();
+
+  if (!proprietario) {
+    redirect("/dashboard");
+  }
+
+  return proprietario;
+}
+
 export type ProfiloCorrente = {
   id: string;
   agenziaId: string;

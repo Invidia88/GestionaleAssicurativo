@@ -675,3 +675,57 @@ Configurare Vercel per il branch `staging` e ottenere il primo Preview Next.js.
 - completare il deployment automatico generato dal push GitHub su `staging`;
 - aggiungere l'alias Preview alla allow-list Auth Supabase Staging;
 - inserire manualmente la Secret Key Staging in Vercel per abilitare gli inviti.
+
+## 2026-07-17 15:54 CEST
+
+### Obiettivo
+
+Avviare il pannello gratuito di gestione delle agenzie clienti, riservato al
+proprietario della piattaforma.
+
+### Decisioni fissate
+
+- nessun dominio personalizzato o servizio a pagamento;
+- alias gratuito Vercel usato come URL stabile dello Staging;
+- una riga `agenzie` rappresenta un cliente, senza nuovi progetti Supabase;
+- accesso proprietario configurato solo server-side;
+- un solo amministratore per agenzia, invitato via email, e collaboratori gestiti
+  successivamente dall'amministratore;
+- disattivazione delle agenzie senza cancellazione;
+- migration e collaudo esclusivamente su Staging, con Production invariata.
+
+### Implementazione
+
+- aggiunta la route server-protected `/piattaforma/agenzie` con elenco,
+  riepiloghi, modulo di attivazione e dialog di disattivazione;
+- autorizzazione proprietario basata su account Auth verificato e variabile
+  `PIATTAFORMA_PROPRIETARIO_EMAIL` esclusivamente server-side;
+- invito Auth del primo amministratore seguito dalla creazione atomica di
+  agenzia e profilo, con rimozione automatica dell’invito in caso di errore;
+- imposto un indice univoco parziale per un solo amministratore per agenzia;
+- rimossa la scelta del ruolo dagli inviti dell’agenzia: i nuovi accessi sono
+  sempre collaboratori;
+- aggiunta la voce Piattaforma alla navigazione soltanto per il proprietario.
+
+### Supabase Staging
+
+- migration `20260717135604_gestione_agenzie_piattaforma.sql` creata tramite
+  Supabase CLI;
+- database locale ricreato da zero con seed e 47 test pgTAP superati;
+- lint locale e remoto senza errori;
+- dry-run remoto verificato e migration applicata soltanto al ref Staging
+  `ooqekupusuchabdyrgev`;
+- cronologia remota riallineata alle tre migration locali;
+- Production `iegoycbbdxojvfniuzjw` non collegata e non modificata;
+- test pgTAP remoto non avviato perché l’estensione di test non è installata sul
+  progetto hosted; nessun dato è stato modificato dal tentativo.
+
+### Vercel e applicazione
+
+- configurata `PIATTAFORMA_PROPRIETARIO_EMAIL` come variabile non sensibile,
+  limitata a `Preview` e al solo branch `staging`;
+- confermata la scelta dell’alias gratuito Vercel senza dominio personalizzato;
+- 16 test unitari, ESLint, TypeScript, build Next.js e `git diff --check`
+  superati;
+- accesso anonimo a `/piattaforma/agenzie` reindirizzato correttamente al login;
+- pagina caricata senza overlay o errori console nella verifica browser locale.

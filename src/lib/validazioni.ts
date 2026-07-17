@@ -89,7 +89,43 @@ export const schemaInvitoUtente = z.object({
   nome: z.string().trim().min(1, "Inserisci il nome").max(80),
   cognome: z.string().trim().min(1, "Inserisci il cognome").max(80),
   email: z.string().trim().email("Inserisci un indirizzo email valido"),
-  ruolo: z.enum(ruoliUtente),
 });
 
 export type DatiInvitoUtente = z.infer<typeof schemaInvitoUtente>;
+
+export const schemaNuovaAgenzia = z.object({
+  nomeAgenzia: z
+    .string()
+    .trim()
+    .min(1, "Inserisci il nome dell’agenzia")
+    .max(120),
+  emailAgenzia: z
+    .string()
+    .trim()
+    .email("Inserisci l’email dell’agenzia"),
+  telefonoAgenzia: z
+    .union([
+      z.literal(""),
+      z.string().trim().refine(
+        (valore) => valore.replace(/\D/g, "").length >= 8,
+        "Inserisci un numero di telefono valido",
+      ),
+    ])
+    .optional(),
+  nomeAmministratore: z
+    .string()
+    .trim()
+    .min(1, "Inserisci il nome dell’amministratore")
+    .max(80),
+  cognomeAmministratore: z
+    .string()
+    .trim()
+    .min(1, "Inserisci il cognome dell’amministratore")
+    .max(80),
+  emailAmministratore: z
+    .string()
+    .trim()
+    .email("Inserisci l’email dell’amministratore"),
+});
+
+export type DatiNuovaAgenzia = z.infer<typeof schemaNuovaAgenzia>;

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { MenuMobile, Sidebar } from "@/components/navigazione-principale";
-import { richiediProfiloCorrente } from "@/lib/autenticazione";
+import { richiediProfiloCorrente, trovaProprietarioPiattaforma } from "@/lib/autenticazione";
 
 export default async function LayoutPrivato({
   children,
@@ -9,12 +9,14 @@ export default async function LayoutPrivato({
 }) {
   const profilo = await richiediProfiloCorrente();
   const amministratore = profilo.ruolo === "amministratore";
+  const proprietarioPiattaforma = Boolean(await trovaProprietarioPiattaforma());
 
   return (
     <div className="min-h-screen bg-muted/35 lg:flex">
       <Sidebar
         amministratore={amministratore}
         nomeAgenzia={profilo.agenzia.nome}
+        proprietarioPiattaforma={proprietarioPiattaforma}
       />
       <div className="min-w-0 flex-1">
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between gap-4 border-b bg-background/85 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
@@ -22,6 +24,7 @@ export default async function LayoutPrivato({
             <MenuMobile
               amministratore={amministratore}
               nomeAgenzia={profilo.agenzia.nome}
+              proprietarioPiattaforma={proprietarioPiattaforma}
             />
             <div className="min-w-0">
               <p className="truncate text-sm font-medium">

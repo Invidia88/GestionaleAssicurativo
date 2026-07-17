@@ -1,6 +1,6 @@
 begin;
 
-select plan(39);
+select plan(47);
 
 -- Struttura pubblica: esistono soltanto le sei tabelle applicative previste.
 select has_table('public', 'agenzie', 'esiste la tabella agenzie');
@@ -28,7 +28,10 @@ values
   ('20000000-0000-0000-0000-000000000001', 'authenticated', 'authenticated', 'admin-a@test.local'),
   ('20000000-0000-0000-0000-000000000002', 'authenticated', 'authenticated', 'collaboratore-a@test.local'),
   ('20000000-0000-0000-0000-000000000003', 'authenticated', 'authenticated', 'admin-b@test.local'),
-  ('20000000-0000-0000-0000-000000000004', 'authenticated', 'authenticated', 'inattivo-b@test.local');
+  ('20000000-0000-0000-0000-000000000004', 'authenticated', 'authenticated', 'inattivo-b@test.local'),
+  ('20000000-0000-0000-0000-000000000005', 'authenticated', 'authenticated', 'bootstrap@test.local'),
+  ('20000000-0000-0000-0000-000000000006', 'authenticated', 'authenticated', 'secondo-admin@test.local'),
+  ('20000000-0000-0000-0000-000000000007', 'authenticated', 'authenticated', 'secondo-collaboratore@test.local');
 
 insert into public.agenzie (id, nome, email)
 values
@@ -41,6 +44,49 @@ values
   ('20000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001', 'Carlo', 'Collaboratore', 'collaboratore', true),
   ('20000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000002', 'Bruno', 'Admin', 'amministratore', true),
   ('20000000-0000-0000-0000-000000000004', '10000000-0000-0000-0000-000000000002', 'Ivo', 'Inattivo', 'collaboratore', false);
+
+select is(
+  (
+    select count(*)::integer
+    from pg_catalog.pg_indexes
+    where schemaname = 'public'
+      and indexname = 'utenti_un_amministratore_per_agenzia_idx'
+  ),
+  1,
+  'esiste il vincolo univoco parziale per l’amministratore'
+);
+
+select throws_ok(
+  $$insert into public.utenti (id, agenzia_id, nome, cognome, ruolo)
+    values (
+      '20000000-0000-0000-0000-000000000006',
+      '10000000-0000-0000-0000-000000000001',
+      'Secondo', 'Admin', 'amministratore'
+    )$$,
+  '23505',
+  null,
+  'una stessa agenzia non può avere due amministratori'
+);
+
+select lives_ok(
+  $$insert into public.utenti (id, agenzia_id, nome, cognome, ruolo)
+    values (
+      '20000000-0000-0000-0000-000000000007',
+      '10000000-0000-0000-0000-000000000001',
+      'Secondo', 'Collaboratore', 'collaboratore'
+    )$$,
+  'una stessa agenzia può avere più collaboratori'
+);
+
+select is(
+  (
+    select prosecdef
+    from pg_catalog.pg_proc
+    where oid = 'public.crea_agenzia_con_amministratore(uuid,text,text,text,text,text)'::regprocedure
+  ),
+  false,
+  'il bootstrap agenzia usa i privilegi del chiamante'
+);
 
 insert into public.clienti (id, agenzia_id, nome, cognome, telefono)
 values
@@ -363,6 +409,16 @@ select isnt_empty(
   'l’amministratore può gestire un utente della propria agenzia'
 );
 
+select throws_ok(
+  $$select public.crea_agenzia_con_amministratore(
+      '20000000-0000-0000-0000-000000000005',
+      'Agenzia vietata', 'vietata@test.local', null, 'Nome', 'Admin'
+    )$$,
+  '42501',
+  'permission denied for function crea_agenzia_con_amministratore',
+  'un utente autenticato non può creare tenant'
+);
+
 select is_empty(
   $$update public.clienti set nome = 'Vietato'
     where id = '30000000-0000-0000-0000-000000000001'
@@ -391,6 +447,42 @@ select throws_ok(
   'il ruolo anon non può richiamare il rinnovo'
 );
 
+select throws_ok(
+  $$select public.crea_agenzia_con_amministratore(
+      '20000000-0000-0000-0000-000000000005',
+      'Agenzia anonima', 'anonima@test.local', null, 'Nome', 'Admin'
+    )$$,
+  '42501',
+  'permission denied for function crea_agenzia_con_amministratore',
+  'il ruolo anon non può creare tenant'
+);
+
 reset role;
+set local role service_role;
+
+select lives_ok(
+  $$select public.crea_agenzia_con_amministratore(
+      '20000000-0000-0000-0000-000000000005',
+      'Agenzia Bootstrap', 'BOOTSTRAP@test.local', '', 'Paola', 'Proprietaria'
+    )$$,
+  'il service role crea agenzia e amministratore atomicamente'
+);
+
+reset role;
+
+select is(
+  (
+    select count(*)::integer
+    from public.agenzie as a
+    join public.utenti as u on u.agenzia_id = a.id
+    where a.nome = 'Agenzia Bootstrap'
+      and a.email = 'bootstrap@test.local'
+      and u.id = '20000000-0000-0000-0000-000000000005'
+      and u.ruolo = 'amministratore'
+  ),
+  1,
+  'il bootstrap salva insieme il tenant e il suo amministratore'
+);
+
 select * from finish();
 rollback;

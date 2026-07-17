@@ -42,6 +42,13 @@
   e collegato al repository GitHub ufficiale;
 - risoluzione centralizzata dell'URL pubblico per locale, Preview e Production;
 - 4 test unitari dedicati agli URL di redirect Vercel.
+- pannello proprietario `/piattaforma/agenzie` per creare, elencare, attivare e
+  disattivare le agenzie clienti;
+- invito email del primo e unico amministratore con compensazione automatica in
+  caso di errore database;
+- migration con indice univoco parziale e funzione atomica riservata al
+  `service_role`;
+- 47 test database e 16 test unitari complessivi.
 
 ### Modificato
 
@@ -56,6 +63,10 @@
   a `main`, senza push diretti ordinari su Production.
 - variabili Supabase pubbliche di Staging limitate ai soli deployment Preview
   del branch `staging`.
+- gli amministratori delle agenzie invitano esclusivamente collaboratori; ruolo
+  dell’amministratore non modificabile dall’interfaccia;
+- `PIATTAFORMA_PROPRIETARIO_EMAIL` configurata solo server-side e limitata al
+  Preview del branch `staging`.
 
 ### Corretto
 
@@ -77,6 +88,4 @@
 ### Problemi aperti
 
 - valutare l'attivazione della protezione Auth dalle password compromesse;
-- inserire manualmente `SUPABASE_SECRET_KEY` in `Preview (staging)` su Vercel;
-- aggiungere l'alias stabile Preview alla allow-list Auth Staging e completare
-  il collaudo end-to-end.
+- completare il collaudo autenticato del pannello sul nuovo Preview Vercel.

@@ -9,7 +9,7 @@ import {
   normalizzaTelefono,
   suggerisciScadenzaRinnovo,
 } from "./scadenze.ts";
-import { schemaCliente, schemaCompagnia, schemaContatto, schemaImpostazioniAgenzia, schemaInvitoUtente, schemaPolizza, schemaRinnovoPolizza } from "./validazioni.ts";
+import { schemaCliente, schemaCompagnia, schemaContatto, schemaImpostazioniAgenzia, schemaInvitoUtente, schemaNuovaAgenzia, schemaPolizza, schemaRinnovoPolizza } from "./validazioni.ts";
 
 const riferimento = new Date("2026-07-17T10:00:00.000Z");
 
@@ -105,6 +105,30 @@ test("valida le impostazioni essenziali dell’agenzia", () => {
 });
 
 test("valida i dati dell’invito utente", () => {
-  assert.equal(schemaInvitoUtente.safeParse({ nome: "Luca", cognome: "Bianchi", email: "luca@example.com", ruolo: "collaboratore" }).success, true);
-  assert.equal(schemaInvitoUtente.safeParse({ nome: "", cognome: "Bianchi", email: "non-valida", ruolo: "ospite" }).success, false);
+  assert.equal(schemaInvitoUtente.safeParse({ nome: "Luca", cognome: "Bianchi", email: "luca@example.com" }).success, true);
+  assert.equal(schemaInvitoUtente.safeParse({ nome: "", cognome: "Bianchi", email: "non-valida" }).success, false);
+});
+
+test("valida agenzia e primo amministratore", () => {
+  const dati = {
+    nomeAgenzia: "Agenzia Rossi",
+    emailAgenzia: "info@agenzia-rossi.it",
+    telefonoAgenzia: "02 12345678",
+    nomeAmministratore: "Anna",
+    cognomeAmministratore: "Rossi",
+    emailAmministratore: "anna@agenzia-rossi.it",
+  };
+
+  assert.equal(schemaNuovaAgenzia.safeParse(dati).success, true);
+  assert.equal(
+    schemaNuovaAgenzia.safeParse({
+      ...dati,
+      emailAmministratore: "email-non-valida",
+    }).success,
+    false,
+  );
+  assert.equal(
+    schemaNuovaAgenzia.safeParse({ ...dati, nomeAgenzia: "" }).success,
+    false,
+  );
 });

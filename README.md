@@ -29,6 +29,8 @@ PostgreSQL, Row Level Security, React Hook Form, Zod e date-fns.
 1. Copiare `.env.example` in `.env.local`.
 2. Usare esclusivamente URL e publishable key di Staging in locale.
 3. Non inserire mai secret key in variabili `NEXT_PUBLIC_*`.
+4. Impostare `PIATTAFORMA_PROPRIETARIO_EMAIL` con l’unica email autorizzata a
+   creare e disattivare le agenzie clienti.
 
 ## Installazione e avvio
 
@@ -69,6 +71,11 @@ npm run build
 Le migration vengono applicate e collaudate prima su Staging. Production resta
 vuota e viene aggiornata solo con un'operazione distinta e autorizzata. Vedi
 [`docs/09-deploy-vercel.md`](docs/09-deploy-vercel.md).
+
+Non è necessario acquistare un dominio: Staging usa l’alias gratuito stabile
+`gestionale-assicurativo-git-staging-invidiaa88.vercel.app`. L’URL esatto va
+configurato come Site URL e con `/**` tra i Redirect URLs di Supabase Auth
+Staging.
 
 ## Branch e ambienti
 

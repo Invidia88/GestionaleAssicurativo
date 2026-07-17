@@ -11,6 +11,14 @@ Il database pubblico contiene soltanto `agenzie`, `utenti`, `clienti`,
 - relazioni composte includono `agenzia_id` per impedire collegamenti tra tenant;
 - scadenze in `date`, eventi e timestamp in `timestamptz`;
 - valori di ruolo, stato, tipo contatto ed esito protetti da vincoli `check`.
+- un indice univoco parziale garantisce un solo utente con ruolo
+  `amministratore` per agenzia, lasciando liberi i collaboratori;
+- la funzione `crea_agenzia_con_amministratore` inserisce agenzia e primo
+  amministratore nella stessa transazione ed è eseguibile soltanto dal ruolo
+  server-side `service_role`.
+
+La gestione piattaforma non aggiunge tabelle pubbliche: il database continua a
+contenere esclusivamente le sei entità applicative previste.
 
 ## Eliminazioni
 

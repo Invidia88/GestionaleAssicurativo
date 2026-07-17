@@ -33,12 +33,17 @@
   `Invidia88/GestionaleAssicurativo` dopo controllo dei file versionati.
 - branch remoto `staging` creato dallo stesso commit di `main` e configurato
   come branch locale di lavoro.
+- Preview Vercel Staging attiva e Secret Key configurata con ambito Preview.
+- pannello proprietario e creazione atomica delle agenzie completati;
+- vincolo di un solo amministratore applicato a Supabase Staging;
+- email proprietario configurata su locale e Vercel Preview del branch
+  `staging`;
+- 47 test database, 16 test unitari, lint, typecheck e build superati.
 
 ## In corso
 
-- configurazione del progetto Vercel e delle variabili Preview limitate al
-  branch `staging`;
-- primo deploy e collaudo end-to-end dell'ambiente Staging.
+- pubblicazione del pannello sul branch `staging` e verifica del Preview Vercel;
+- collaudo autenticato della creazione di una nuova agenzia di prova.
 
 ## Da fare
 
@@ -48,13 +53,13 @@
 ## Problemi aperti
 
 - nessun problema bloccante;
-- la Secret Key Staging deve essere aggiunta manualmente a Vercel con ambito
-  `Preview (staging)` prima di collaudare gli inviti utenti;
 - resta un warning non bloccante della cache sperimentale CLI `pg-delta`.
 - l'advisor Auth segnala che la protezione dalle password compromesse è
   disattivata.
+- i test pgTAP remoti richiederebbero l’estensione di test sul progetto hosted;
+  la suite completa è verificata sul database locale ricreato da zero.
 
 ## Prossima attività
 
-Pubblicare il commit su `staging`, verificare il deployment automatico GitHub e
-aggiungere il relativo alias alla allow-list Auth Supabase Staging.
+Pubblicare il commit su `staging`, attendere il Preview automatico e collaudare
+il pannello autenticato, senza modificare Production.

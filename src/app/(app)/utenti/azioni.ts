@@ -7,7 +7,7 @@ import { richiediAmministratoreCorrente } from "@/lib/autenticazione";
 import { creaClientSupabaseAmministratore } from "@/lib/supabase/amministratore";
 import { creaClientSupabaseServer } from "@/lib/supabase/server";
 import { ottieniUrlSito } from "@/lib/url-sito";
-import { ruoliUtente, schemaInvitoUtente, type DatiInvitoUtente } from "@/lib/validazioni";
+import { schemaInvitoUtente, type DatiInvitoUtente } from "@/lib/validazioni";
 
 export async function invitaUtente(dati: DatiInvitoUtente) {
   const profilo = await richiediAmministratoreCorrente();
@@ -29,7 +29,7 @@ export async function invitaUtente(dati: DatiInvitoUtente) {
     agenzia_id: profilo.agenziaId,
     nome: validazione.data.nome,
     cognome: validazione.data.cognome,
-    ruolo: validazione.data.ruolo,
+    ruolo: "collaboratore",
     attivo: true,
   });
 
@@ -49,13 +49,4 @@ export async function impostaUtenteAttivo(id: string, attivo: boolean) {
   const { data, error } = await supabase.from("utenti").update({ attivo }).eq("id", id).eq("agenzia_id", profilo.agenziaId).select("id").maybeSingle();
   revalidatePath("/utenti");
   return { successo: !error && Boolean(data), messaggio: error || !data ? "Non è stato possibile modificare l’utente" : undefined };
-}
-
-export async function modificaRuoloUtente(id: string, ruolo: string) {
-  const profilo = await richiediAmministratoreCorrente();
-  if (!z.string().uuid().safeParse(id).success || !z.enum(ruoliUtente).safeParse(ruolo).success || id === profilo.id) return { successo: false, messaggio: "Non puoi modificare il tuo ruolo" };
-  const supabase = await creaClientSupabaseServer();
-  const { data, error } = await supabase.from("utenti").update({ ruolo }).eq("id", id).eq("agenzia_id", profilo.agenziaId).select("id").maybeSingle();
-  revalidatePath("/utenti");
-  return { successo: !error && Boolean(data), messaggio: error || !data ? "Non è stato possibile modificare il ruolo" : undefined };
 }

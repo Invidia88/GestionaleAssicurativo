@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { creaClientSupabaseServer } from "@/lib/supabase/server";
 import { ottieniUrlSito } from "@/lib/url-sito";
+import { emailAutorizzataPiattaforma } from "@/lib/autenticazione";
 
 export type StatoAutenticazione = {
   messaggio?: string;
@@ -74,13 +75,21 @@ export async function accedi(
     .maybeSingle();
 
   if (!profilo) {
+    if (emailAutorizzataPiattaforma(datiAccesso.user.email)) {
+      redirect("/piattaforma/agenzie");
+    }
+
     await supabase.auth.signOut();
     return {
       messaggio: "L’account non è attivo oppure non è associato a un’agenzia",
     };
   }
 
-  redirect("/dashboard");
+  redirect(
+    emailAutorizzataPiattaforma(datiAccesso.user.email)
+      ? "/piattaforma/agenzie"
+      : "/dashboard",
+  );
 }
 
 export async function richiediRecuperoPassword(

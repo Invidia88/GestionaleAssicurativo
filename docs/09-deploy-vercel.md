@@ -24,15 +24,29 @@ esclusivamente le credenziali del progetto Supabase Production.
 
 Le variabili `NEXT_PUBLIC_SUPABASE_URL` e
 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` di Staging sono limitate a
-`Preview (staging)`. Anche `SUPABASE_SECRET_KEY` deve avere esattamente questo
-ambito, deve essere marcata sensibile e deve essere inserita manualmente nella
-dashboard Vercel: non va copiata in Production e non deve mai avere il prefisso
-`NEXT_PUBLIC_`.
+`Preview (staging)`. Anche `SUPABASE_SECRET_KEY` ha esattamente questo ambito, è
+marcata sensibile e non deve mai avere il prefisso `NEXT_PUBLIC_`.
+
+`PIATTAFORMA_PROPRIETARIO_EMAIL` è una variabile server-side non sensibile,
+limitata a `Preview (staging)`, che abilita l’unico proprietario del pannello
+`/piattaforma/agenzie`. Production non riceve automaticamente nessuna di queste
+variabili.
 
 `NEXT_PUBLIC_SITE_URL` è facoltativa nei Preview. Se assente, l'app usa prima
 `VERCEL_BRANCH_URL`, quindi `VERCEL_URL`; in Production verrà valorizzata con il
 dominio ufficiale esatto. Gli URL corrispondenti devono essere presenti nella
 allow-list Auth del relativo progetto Supabase.
+
+## URL gratuito Staging
+
+Non è richiesto un dominio a pagamento. Lo Staging usa l’alias gratuito stabile:
+
+`https://gestionale-assicurativo-git-staging-invidiaa88.vercel.app`
+
+In Supabase Auth Staging questo valore va usato come Site URL esatto e
+`https://gestionale-assicurativo-git-staging-invidiaa88.vercel.app/**` come
+Redirect URL. Resta inoltre autorizzato `http://localhost:3000/**` per lo
+sviluppo locale.
 
 ## Flusso di promozione
 

@@ -9,6 +9,7 @@ const percorsiPrivati = [
   "/contatti",
   "/utenti",
   "/impostazioni",
+  "/piattaforma",
 ];
 
 function percorsoPrivato(pathname: string) {

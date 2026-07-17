@@ -8,6 +8,9 @@
 - permessi dei due ruoli;
 - comportamento degli utenti inattivi e anonimi;
 - eliminazioni consentite, bloccate e mantenimento storico contatti.
+- un solo amministratore per agenzia e più collaboratori consentiti;
+- bootstrap agenzia riservato al `service_role` e vietato ad anon e utenti
+  autenticati.
 
 ## Verifiche applicazione
 
@@ -16,7 +19,7 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 ## Ultimo risultato
 
 - `supabase db reset --local`: superato;
-- 39 test pgTAP: superati;
+- 47 test pgTAP locali: superati;
 - database lint: nessun errore;
 - advisor schema e prestazioni: nessun warning; resta l'avviso Auth sulla
   protezione dalle password compromesse;
@@ -25,7 +28,7 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 - seed Staging eseguito due volte senza duplicati;
 - verifica remota seed: 2 agenzie, 4 utenti, 10 compagnie, 30 clienti, 40
   polizze e 16 contatti;
-- 11 test unitari superati per scadenze, telefono, WhatsApp e validazioni di
+- 16 test unitari superati per scadenze, URL, telefono, WhatsApp e validazioni di
   clienti, compagnie, polizze, contatti, impostazioni e inviti;
 - login amministratore Staging e lettura RLS delle 20 polizze Aurora superati;
 - pagina login verificata a 390 px senza overflow, overlay o errori browser.
@@ -43,6 +46,11 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 - modalità scura attivata dalle Impostazioni e verificata dopo ricarica su
   desktop e a 390 px; preferenza locale, `color-scheme` e assenza di errori
   Next.js confermati.
+- route `/piattaforma/agenzie` protetta: un visitatore anonimo viene reindirizzato
+  al login senza overlay o errori console;
+- lint remoto Staging senza errori e migration gestione agenzie presente nella
+  cronologia. I test pgTAP hosted non partono perché l’estensione di test non è
+  installata sul progetto; la suite identica è stata eseguita sul reset locale.
 
 ## Criteri del blocco polizze avanzato
 
