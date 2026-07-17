@@ -101,3 +101,8 @@
 - Preview Vercel completato in stato `READY` e alias stabile aggiornato;
 - route pubblica e protezione anonima del pannello verificate via HTTP;
 - `main`, Supabase Production e variabili Vercel Production invariati.
+- commit `ffdee0f` con correzione inviti e isolamento dashboard pubblicato su
+  `staging`;
+- Preview Vercel della correzione completato in stato `READY`, alias stabile
+  aggiornato e `/auth/invito` verificata con HTTP 200;
+- nessuna pull request verso `main` e nessuna modifica a Supabase Production.

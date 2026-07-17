@@ -47,10 +47,12 @@
   implementati;
 - isolamento dashboard ricollaudato con 49 test pgTAP e filtri tenant espliciti;
 - 20 test unitari, lint, typecheck, build e verifica browser locale superati.
+- commit `ffdee0f` pubblicato su `staging` e Preview Vercel in stato `READY`;
+- alias Staging aggiornato e nuova route `/auth/invito` verificata con HTTP 200.
 
 ## In corso
 
-- pubblicazione della correzione sul branch e Preview Staging.
+- collaudo manuale di un nuovo invito email sul Preview Staging.
 
 ## Da fare
 

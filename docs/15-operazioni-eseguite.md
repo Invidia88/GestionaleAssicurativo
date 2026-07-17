@@ -793,3 +793,22 @@ dashboard tra agenzie.
 - verifica browser locale superata: contenuto presente, nessun overlay di errore
   e rifiuto corretto di un URL privo di credenziali d'invito;
 - nessuna migration o modifica ai dati Staging e Production.
+
+### Pubblicazione Staging
+
+- creato il commit `ffdee0f` (`Fix invite password setup and tenant dashboard`);
+- push eseguito esclusivamente su `origin/staging`;
+- `main` e Supabase Production non modificati;
+- deployment GitHub automatico completato in stato `READY`;
+- deployment univoco:
+  `gestionale-assicurativo-ngg1a96lt-invidiaa88.vercel.app`;
+- alias stabile aggiornato:
+  `gestionale-assicurativo-git-staging-invidiaa88.vercel.app`;
+- `/auth/invito` verificata con HTTP 200 tramite il bypass autenticato Vercel;
+- il Preview pubblico resta protetto dal login Vercel, come configurato.
+
+### Attività manuale residua
+
+Aprire un nuovo invito ricevuto dopo questa pubblicazione e scegliere la
+password. Se l'invito precedente è già stato aperto, usare “Password
+dimenticata?” perché il relativo collegamento monouso potrebbe essere consumato.
