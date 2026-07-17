@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   PanelsTopLeft,
+  RotateCcw,
   Settings,
   ShieldCheck,
   Users,
@@ -35,6 +36,7 @@ const voci = [
   { href: "/dashboard", etichetta: "Dashboard", Icona: LayoutDashboard },
   { href: "/clienti", etichetta: "Clienti", Icona: Users },
   { href: "/polizze", etichetta: "Polizze", Icona: ShieldCheck },
+  { href: "/scaduti", etichetta: "Scaduti", Icona: RotateCcw },
   { href: "/compagnie", etichetta: "Compagnie", Icona: Building2 },
   { href: "/contatti", etichetta: "Contatti", Icona: ContactRound },
 ];

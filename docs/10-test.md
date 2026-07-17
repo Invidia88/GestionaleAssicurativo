@@ -28,7 +28,7 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 - seed Staging eseguito due volte senza duplicati;
 - verifica remota seed: 2 agenzie, 4 utenti, 10 compagnie, 30 clienti, 40
   polizze e 16 contatti;
-- 20 test unitari superati per callback inviti, scadenze, URL, telefono,
+- 23 test unitari superati per callback inviti, recupero annuale, scadenze, URL, telefono,
   WhatsApp e validazioni di
   clienti, compagnie, polizze, contatti, impostazioni e inviti;
 - login amministratore Staging e lettura RLS delle 20 polizze Aurora superati;
@@ -52,6 +52,8 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 - lint remoto Staging senza errori e migration gestione agenzie presente nella
   cronologia. I test pgTAP hosted non partono perché l’estensione di test non è
   installata sul progetto; la suite identica è stata eseguita sul reset locale.
+- pagina `Scaduti` verificata con l'amministratore Aurora: 3 polizze del tenant,
+  nessun dato Tirreno, nessun overlay o overflow a 1280 e 390 px.
 
 ## Criteri del blocco polizze avanzato
 
@@ -60,6 +62,15 @@ Eseguire lint, typecheck, test e build dopo ogni gruppo di modifiche.
 - rinnovo rifiutato per polizze già chiuse o con scadenza non successiva;
 - eliminazione della polizza con conservazione dei contatti storici;
 - messaggi applicativi in italiano senza codici o dettagli Supabase.
+
+## Criteri recupero scaduti
+
+- entrano soltanto polizze `attive` con data passata;
+- polizze `rinnovate` e `annullate` restano escluse;
+- ricorrenza annuale calcolata correttamente, incluso il 29 febbraio;
+- finestra `Da contattare` aperta esattamente 14 giorni prima;
+- query, clienti e compagnie filtrati per il tenant autenticato;
+- layout verificato su desktop e smartphone.
 
 ## Checklist manuale
 

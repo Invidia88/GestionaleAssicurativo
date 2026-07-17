@@ -49,6 +49,10 @@
 - migration con indice univoco parziale e funzione atomica riservata al
   `service_role`;
 - 49 test database e 20 test unitari complessivi.
+- sezione `Scaduti` per recuperare i clienti con polizze non rinnovate in
+  prossimità della successiva ricorrenza annuale;
+- finestra operativa di 14 giorni, ricerca e azione WhatsApp per proporre un
+  nuovo preventivo.
 
 ### Modificato
 

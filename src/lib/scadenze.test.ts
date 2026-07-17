@@ -3,8 +3,10 @@ import test from "node:test";
 
 import {
   calcolaGiorniMancanti,
+  calcolaRecuperoAnnuale,
   calcolaStatoScadenza,
   creaLinkWhatsapp,
+  creaMessaggioRecuperoWhatsapp,
   creaMessaggioWhatsapp,
   normalizzaTelefono,
   suggerisciScadenzaRinnovo,
@@ -31,6 +33,52 @@ test("normalizza i numeri italiani", () => {
   assert.equal(normalizzaTelefono("333 123-4567"), "+393331234567");
   assert.equal(normalizzaTelefono("0039 (333) 1234567"), "+393331234567");
   assert.equal(normalizzaTelefono("+39 333 1234567"), "+393331234567");
+});
+
+test("calcola la prossima ricorrenza annuale per il recupero cliente", () => {
+  assert.deepEqual(
+    calcolaRecuperoAnnuale("2025-07-27", riferimento),
+    {
+      dataRicorrenza: "2026-07-27",
+      giorniAllaRicorrenza: 10,
+      daContattare: true,
+    },
+  );
+  assert.deepEqual(
+    calcolaRecuperoAnnuale("2024-06-30", riferimento),
+    {
+      dataRicorrenza: "2027-06-30",
+      giorniAllaRicorrenza: 348,
+      daContattare: false,
+    },
+  );
+});
+
+test("adatta al 28 febbraio la ricorrenza di una scadenza bisestile", () => {
+  assert.deepEqual(
+    calcolaRecuperoAnnuale(
+      "2024-02-29",
+      new Date("2025-02-14T10:00:00.000Z"),
+    ),
+    {
+      dataRicorrenza: "2025-02-28",
+      giorniAllaRicorrenza: 14,
+      daContattare: true,
+    },
+  );
+});
+
+test("prepara il messaggio WhatsApp per un nuovo preventivo", () => {
+  assert.equal(
+    creaMessaggioRecuperoWhatsapp({
+      nomeCliente: "Mario",
+      tipoPolizza: "Auto",
+      dataRicorrenza: "2026-07-27",
+      nomeAgenzia: "Agenzia Aurora",
+      telefonoAgenzia: "+390212345678",
+    }),
+    "Buongiorno Mario, si avvicina la ricorrenza annuale del 27/07/2026 per la tua polizza Auto. Possiamo prepararti un nuovo preventivo senza impegno. Agenzia Aurora. Puoi contattarci al +390212345678.",
+  );
 });
 
 test("sostituisce i placeholder e crea il link WhatsApp", () => {

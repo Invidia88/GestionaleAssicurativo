@@ -5,6 +5,7 @@ const percorsiPrivati = [
   "/dashboard",
   "/clienti",
   "/polizze",
+  "/scaduti",
   "/compagnie",
   "/contatti",
   "/utenti",

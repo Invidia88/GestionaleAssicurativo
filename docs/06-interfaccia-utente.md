@@ -83,6 +83,22 @@ Il rinnovo è disponibile soltanto per una polizza `attiva` e la nuova scadenza
 deve essere successiva a quella precedente. Il test Staging iniziale ha creato
 e rimosso una polizza temporanea, lasciando le 20 polizze demo originali.
 
+## Recupero clienti scaduti
+
+La pagina `/scaduti` raccoglie le polizze con stato `attiva` e data già
+trascorsa. Una polizza rinnovata tramite il flusso applicativo viene marcata
+`rinnovata` e scompare automaticamente dalla lista, senza aggiungere campi o
+tabelle al database.
+
+Per ogni polizza viene calcolata la prima ricorrenza annuale futura della vecchia
+scadenza. Nei 14 giorni precedenti la ricorrenza il cliente viene evidenziato
+come `Da contattare`; gli altri restano visibili e ordinati per priorità. La
+pagina offre ricerca, filtro, collegamenti a cliente e polizza e un messaggio
+WhatsApp dedicato alla proposta di un nuovo preventivo.
+
+La query usa la sessione dell'utente, le policy RLS e un filtro esplicito per
+l'agenzia verificata. Su smartphone la tabella diventa una serie di card.
+
 ## Completamento frontend
 
 Il blocco finale completa le schermate previste dal brief:

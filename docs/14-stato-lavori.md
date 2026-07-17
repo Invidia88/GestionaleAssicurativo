@@ -49,10 +49,15 @@
 - 20 test unitari, lint, typecheck, build e verifica browser locale superati.
 - commit `ffdee0f` pubblicato su `staging` e Preview Vercel in stato `READY`;
 - alias Staging aggiornato e nuova route `/auth/invito` verificata con HTTP 200.
+- sezione `Scaduti` implementata con ricorrenza annuale, finestra di 14 giorni,
+  ricerca, filtro e preventivo WhatsApp;
+- 23 test unitari, 49 test RLS, lint, typecheck e build superati;
+- isolamento Aurora/Tirreno e layout desktop/mobile della nuova pagina verificati.
 
 ## In corso
 
-- collaudo manuale di un nuovo invito email sul Preview Staging.
+- pubblicazione della sezione `Scaduti` sul Preview Staging;
+- preparazione controllata del primo rilascio Production con database vuoto.
 
 ## Da fare
 
@@ -70,6 +75,5 @@
 
 ## Prossima attività
 
-Pubblicare la correzione su Staging e collaudare un nuovo invito. Per un invito
-già aperto prima della correzione, usare il recupero password perché il link
-monouso potrebbe essere già stato consumato.
+Completare `Scaduti` su Staging, verificare il database Production ancora vuoto,
+applicare soltanto le migration e promuovere `staging` verso `main`.

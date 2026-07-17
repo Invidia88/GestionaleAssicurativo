@@ -812,3 +812,40 @@ dashboard tra agenzie.
 Aprire un nuovo invito ricevuto dopo questa pubblicazione e scegliere la
 password. Se l'invito precedente è già stato aperto, usare “Password
 dimenticata?” perché il relativo collegamento monouso potrebbe essere consumato.
+
+## 2026-07-17 17:01 CEST
+
+### Obiettivo
+
+Aggiungere il recupero annuale dei clienti con polizze scadute e preparare il
+primo rilascio Production senza dati dimostrativi.
+
+### Decisioni fissate
+
+- una polizza non rinnovata è `attiva` con `data_scadenza` passata;
+- una polizza rinnovata dal gestionale è già marcata `rinnovata` ed esclusa;
+- la prima ricorrenza annuale futura determina l'ordine della lista;
+- la finestra operativa inizia 14 giorni prima della ricorrenza;
+- nessuna nuova tabella o migration è necessaria;
+- Production riceverà lo schema verificato ma nessun seed e nessun dato demo;
+- prima della promozione verranno verificati separatamente database, Auth,
+  variabili Vercel e URL di redirect Production.
+
+### Implementazione
+
+- aggiunta `/scaduti` alla navigazione desktop, mobile e al proxy Auth;
+- query server-side limitata al tenant, alle polizze `attive` e alle date passate;
+- calcolo della prima ricorrenza annuale futura con gestione del 29 febbraio;
+- finestra `Da contattare` impostata a 14 giorni;
+- riepiloghi, ricerca, filtro, tabella desktop, card mobile e stato vuoto;
+- collegamenti rapidi a cliente, polizza e preventivo WhatsApp dedicato;
+- nessuna modifica allo schema database.
+
+### Verifiche
+
+- 23 test unitari e 49 test pgTAP superati;
+- ESLint, TypeScript, build Next.js e `git diff --check` superati;
+- route `/scaduti` presente nella build;
+- browser autenticato Aurora: 3 polizze scadute visibili e nessun dato Tirreno;
+- desktop 1280 px e smartphone 390 px senza overflow o overlay Next.js;
+- azioni della tabella compattate dopo la verifica visuale su portatile.

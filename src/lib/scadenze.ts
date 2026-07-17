@@ -13,7 +13,7 @@ function serialeData(data: string) {
   return Math.floor(Date.UTC(anno, mese - 1, giorno) / 86_400_000);
 }
 
-function dataOggiRoma(ora: Date) {
+export function ottieniDataOggiRoma(ora = new Date()) {
   const parti = new Intl.DateTimeFormat("en-CA", {
     timeZone: fusoOrario,
     year: "numeric",
@@ -25,7 +25,43 @@ function dataOggiRoma(ora: Date) {
 }
 
 export function calcolaGiorniMancanti(dataScadenza: string, ora = new Date()) {
-  return serialeData(dataScadenza) - serialeData(dataOggiRoma(ora));
+  return serialeData(dataScadenza) - serialeData(ottieniDataOggiRoma(ora));
+}
+
+function creaDataValida(anno: number, mese: number, giorno: number) {
+  const ultimoGiorno = new Date(Date.UTC(anno, mese, 0)).getUTCDate();
+  return `${anno}-${String(mese).padStart(2, "0")}-${String(Math.min(giorno, ultimoGiorno)).padStart(2, "0")}`;
+}
+
+export type RecuperoAnnuale = {
+  dataRicorrenza: string;
+  giorniAllaRicorrenza: number;
+  daContattare: boolean;
+};
+
+export function calcolaRecuperoAnnuale(
+  dataScadenza: string,
+  ora = new Date(),
+  giorniPreavviso = 14,
+): RecuperoAnnuale {
+  const [annoScadenza, mese, giorno] = dataScadenza.split("-").map(Number);
+  const oggi = ottieniDataOggiRoma(ora);
+  const annoOggi = Number(oggi.slice(0, 4));
+  let annoRicorrenza = Math.max(annoScadenza + 1, annoOggi);
+  let dataRicorrenza = creaDataValida(annoRicorrenza, mese, giorno);
+
+  if (dataRicorrenza < oggi) {
+    annoRicorrenza += 1;
+    dataRicorrenza = creaDataValida(annoRicorrenza, mese, giorno);
+  }
+
+  const giorniAllaRicorrenza = serialeData(dataRicorrenza) - serialeData(oggi);
+
+  return {
+    dataRicorrenza,
+    giorniAllaRicorrenza,
+    daContattare: giorniAllaRicorrenza <= giorniPreavviso,
+  };
 }
 
 export function calcolaStatoScadenza(
@@ -147,4 +183,22 @@ export function creaMessaggioWhatsapp(
 export function creaLinkWhatsapp(telefono: string, messaggio: string) {
   const numero = normalizzaTelefono(telefono).replace(/\D/g, "");
   return `https://wa.me/${numero}?text=${encodeURIComponent(messaggio)}`;
+}
+
+export function creaMessaggioRecuperoWhatsapp({
+  nomeCliente,
+  tipoPolizza,
+  dataRicorrenza,
+  nomeAgenzia,
+  telefonoAgenzia,
+}: {
+  nomeCliente: string;
+  tipoPolizza: string;
+  dataRicorrenza: string;
+  nomeAgenzia: string;
+  telefonoAgenzia: string | null;
+}) {
+  const contatto = telefonoAgenzia ? ` Puoi contattarci al ${telefonoAgenzia}.` : "";
+
+  return `Buongiorno ${nomeCliente}, si avvicina la ricorrenza annuale del ${formattaDataItaliana(dataRicorrenza)} per la tua polizza ${tipoPolizza}. Possiamo prepararti un nuovo preventivo senza impegno. ${nomeAgenzia}.${contatto}`;
 }
