@@ -36,6 +36,8 @@
   metadata, package e configurazione Supabase locale;
 - repository ufficiale GitHub collegato a
   `Invidia88/GestionaleAssicurativo` per il primo versionamento.
+- branch permanente `staging` affiancato a `main`, con corrispondenza documentata
+  verso i due progetti Supabase.
 
 ### Modificato
 
@@ -46,6 +48,8 @@
 - gestione del tema resa interna all'app per evitare avvisi di rendering con
   Next.js 16.2; rimossa la dipendenza `next-themes` non più necessaria.
 - branch locale iniziale rinominato da `master` a `main`.
+- flusso di rilascio definito come promozione tramite pull request da `staging`
+  a `main`, senza push diretti ordinari su Production.
 
 ### Corretto
 

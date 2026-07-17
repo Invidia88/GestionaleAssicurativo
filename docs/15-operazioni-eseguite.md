@@ -606,3 +606,30 @@ su GitHub.
 Commit iniziale creato e codice pubblicato sul branch `main` del repository
 GitHub ufficiale. Non è stata aperta una pull request perché il repository era
 vuoto e non esisteva ancora un branch base con una storia precedente.
+
+## 2026-07-17 14:31 CEST
+
+### Obiettivo
+
+Creare un flusso GitHub a due branch coerente con gli ambienti Supabase.
+
+### Operazioni eseguite
+
+- definito `main` come branch Production permanente;
+- creato `staging` come branch di sviluppo integrato e collaudo;
+- documentata la corrispondenza con i ref Supabase Staging e Production;
+- definita la promozione ordinaria tramite pull request `staging → main`;
+- mantenuta separata e manuale l'applicazione delle migration Production;
+- lasciato `staging` come branch locale attivo per le prossime modifiche.
+
+### Verifiche
+
+- entrambi i branch GitHub puntano allo stesso commit di configurazione iniziale;
+- `main` resta il branch predefinito del repository;
+- `staging` traccia `origin/staging`;
+- nessuna modifica a database, Auth o dati Supabase.
+
+### Risultato
+
+Flusso di sviluppo pronto: le prossime fix e feature partono da `staging` e
+raggiungono `main` soltanto dopo collaudo e pull request.

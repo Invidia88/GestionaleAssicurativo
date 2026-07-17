@@ -70,6 +70,15 @@ Le migration vengono applicate e collaudate prima su Staging. Production resta
 vuota e viene aggiornata solo con un'operazione distinta e autorizzata. Vedi
 [`docs/09-deploy-vercel.md`](docs/09-deploy-vercel.md).
 
+## Branch e ambienti
+
+- `staging`: sviluppo integrato, collaudo Vercel e Supabase Staging;
+- `main`: codice approvato destinato a Vercel e Supabase Production.
+
+Le modifiche vengono provate su `staging` e promosse con una pull request verso
+`main`. Le migration Production non partono automaticamente dal branch: vengono
+applicate in una fase separata, dopo verifica su Staging e autorizzazione.
+
 ## Credenziali demo
 
 Gli utenti disponibili su Staging sono:

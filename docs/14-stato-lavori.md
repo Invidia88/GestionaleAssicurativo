@@ -31,6 +31,8 @@
 - repository GitHub ufficiale configurato con branch iniziale `main`.
 - codice pubblicato sul branch `main` di
   `Invidia88/GestionaleAssicurativo` dopo controllo dei file versionati.
+- branch remoto `staging` creato dallo stesso commit di `main` e configurato
+  come branch locale di lavoro.
 
 ## In corso
 
@@ -50,4 +52,5 @@
 
 ## Prossima attività
 
-Configurare e distribuire l'applicazione Staging su Vercel.
+Configurare Vercel affinché `staging` usi Supabase Staging e `main` usi
+Supabase Production, quindi collaudare il primo deployment Staging.
