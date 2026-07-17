@@ -20,6 +20,7 @@ export type StatoAutenticazione = {
 const schemaAccesso = z.object({
   email: z.string().trim().email("Inserisci un indirizzo email valido"),
   password: z.string().min(1, "Inserisci la password"),
+  areaAccesso: z.enum(["agenzia", "piattaforma"]),
 });
 
 const schemaRecupero = z.object({
@@ -49,6 +50,7 @@ export async function accedi(
   const validazione = schemaAccesso.safeParse({
     email: modulo.get("email"),
     password: modulo.get("password"),
+    areaAccesso: modulo.get("areaAccesso"),
   });
 
   if (!validazione.success) {
@@ -67,6 +69,30 @@ export async function accedi(
     return { messaggio };
   }
 
+  const proprietarioPiattaforma = emailAutorizzataPiattaforma(
+    datiAccesso.user.email,
+  );
+
+  if (validazione.data.areaAccesso === "piattaforma") {
+    if (proprietarioPiattaforma) {
+      redirect("/piattaforma/agenzie");
+    }
+
+    await supabase.auth.signOut();
+    return {
+      messaggio:
+        "Questo accesso è riservato all’amministratore della piattaforma",
+    };
+  }
+
+  if (proprietarioPiattaforma) {
+    await supabase.auth.signOut();
+    return {
+      messaggio:
+        "Questo è un account amministratore piattaforma. Usa la sezione “Amministratore piattaforma”",
+    };
+  }
+
   const { data: profilo } = await supabase
     .from("utenti")
     .select("id")
@@ -75,21 +101,13 @@ export async function accedi(
     .maybeSingle();
 
   if (!profilo) {
-    if (emailAutorizzataPiattaforma(datiAccesso.user.email)) {
-      redirect("/piattaforma/agenzie");
-    }
-
     await supabase.auth.signOut();
     return {
       messaggio: "L’account non è attivo oppure non è associato a un’agenzia",
     };
   }
 
-  redirect(
-    emailAutorizzataPiattaforma(datiAccesso.user.email)
-      ? "/piattaforma/agenzie"
-      : "/dashboard",
-  );
+  redirect("/dashboard");
 }
 
 export async function richiediRecuperoPassword(

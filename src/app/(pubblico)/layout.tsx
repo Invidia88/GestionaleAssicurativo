@@ -15,11 +15,12 @@ export default function LayoutPubblico({ children }: { children: React.ReactNode
             Ogni scadenza al momento giusto
           </p>
           <h1 className="text-balance text-4xl font-semibold tracking-tight xl:text-5xl">
-            Clienti, polizze e promemoria in un unico posto semplice.
+            Una piattaforma semplice per chi gestisce le assicurazioni.
           </h1>
           <p className="max-w-lg text-lg leading-8 text-primary-foreground/70">
-            Accedi all’area riservata della tua agenzia per controllare le
-            prossime scadenze e ricontattare rapidamente i clienti.
+            L’amministratore della piattaforma attiva le agenzie. Ogni agenzia
+            accede poi alla propria area riservata per gestire clienti, polizze
+            e scadenze.
           </p>
         </div>
         <p className="text-sm text-primary-foreground/50">

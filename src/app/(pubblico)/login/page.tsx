@@ -11,23 +11,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { trovaProfiloCorrente } from "@/lib/autenticazione";
+import {
+  trovaProfiloCorrente,
+  trovaProprietarioPiattaforma,
+} from "@/lib/autenticazione";
 
 export const metadata: Metadata = { title: "Accedi" };
 
 type LoginProps = {
-  searchParams: Promise<{ motivo?: string; esito?: string }>;
+  searchParams: Promise<{ motivo?: string; esito?: string; area?: string }>;
 };
 
 export default async function Login({ searchParams }: LoginProps) {
-  const [parametri, profilo] = await Promise.all([
+  const [parametri, profilo, proprietario] = await Promise.all([
     searchParams,
     trovaProfiloCorrente(),
+    trovaProprietarioPiattaforma(),
   ]);
 
   if (profilo) {
     redirect("/dashboard");
   }
+
+  if (proprietario) {
+    redirect("/piattaforma/agenzie");
+  }
+
+  const areaPreselezionata =
+    parametri.area === "piattaforma" ? "piattaforma" : "agenzia";
 
   const messaggio =
     parametri.esito === "password-aggiornata"
@@ -51,9 +62,9 @@ export default async function Login({ searchParams }: LoginProps) {
 
       <Card>
         <CardHeader className="space-y-2">
-          <CardTitle className="text-2xl">Bentornato</CardTitle>
+          <CardTitle className="text-2xl">Accedi al gestionale</CardTitle>
           <CardDescription>
-            Inserisci le credenziali fornite dalla tua agenzia.
+            Seleziona l’area corretta e inserisci le tue credenziali.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
@@ -62,13 +73,13 @@ export default async function Login({ searchParams }: LoginProps) {
               <AlertDescription>{messaggio}</AlertDescription>
             </Alert>
           ) : null}
-          <ModuloAccesso />
+          <ModuloAccesso areaPreselezionata={areaPreselezionata} />
         </CardContent>
       </Card>
 
       <p className="text-center text-sm text-muted-foreground">
-        Non è prevista la registrazione pubblica. Gli account vengono creati
-        dall’amministratore dell’agenzia.
+        Non è prevista la registrazione pubblica. Le agenzie vengono attivate
+        dall’amministratore della piattaforma.
       </p>
     </div>
   );

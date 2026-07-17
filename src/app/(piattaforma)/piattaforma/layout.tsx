@@ -32,7 +32,7 @@ export default async function LayoutPiattaforma({
                 GestionaleAssicurativo
               </span>
               <span className="block truncate text-xs text-muted-foreground">
-                Gestione piattaforma
+                Area amministratore
               </span>
             </span>
           </Link>
@@ -58,7 +58,7 @@ export default async function LayoutPiattaforma({
 
       <div className="mx-auto flex max-w-[90rem] items-center gap-2 px-4 pt-5 text-xs text-muted-foreground sm:px-6 lg:px-10">
         <ShieldCheck aria-hidden="true" className="size-4 text-primary" />
-        Accesso riservato a {proprietario.email}
+        Accesso amministratore riservato a {proprietario.email}
       </div>
       <main className="mx-auto w-full max-w-[90rem] p-4 sm:p-6 lg:p-10 lg:pt-6">
         {children}

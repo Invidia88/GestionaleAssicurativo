@@ -22,7 +22,7 @@ import {
 import { richiediProprietarioPiattaforma } from "@/lib/autenticazione";
 import { creaClientSupabaseAmministratore } from "@/lib/supabase/amministratore";
 
-export const metadata: Metadata = { title: "Gestione agenzie" };
+export const metadata: Metadata = { title: "I miei clienti" };
 
 function formattaData(data: string) {
   return new Intl.DateTimeFormat("it-IT", {
@@ -61,13 +61,13 @@ export default async function AgenziePiattaforma() {
     <div className="space-y-7">
       <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-sm font-medium text-primary">Piattaforma</p>
+          <p className="text-sm font-medium text-primary">Amministratore piattaforma</p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Agenzie clienti
+            I miei clienti
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Crea un’agenzia, invita il suo unico amministratore e controlla gli
-            accessi senza eliminare i dati.
+            Ogni cliente è un’agenzia separata. Attivala, invita il suo
+            amministratore e controlla gli accessi senza eliminare i dati.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3">
@@ -95,7 +95,7 @@ export default async function AgenziePiattaforma() {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_25rem]">
         <Card className="border-border/70 shadow-sm">
           <CardHeader>
-            <CardTitle>Organizzazioni attivate</CardTitle>
+            <CardTitle>Agenzie clienti</CardTitle>
             <CardDescription>
               Ogni agenzia è isolata dalle altre tramite le policy di sicurezza.
             </CardDescription>
@@ -107,9 +107,9 @@ export default async function AgenziePiattaforma() {
                   aria-hidden="true"
                   className="mx-auto mb-3 size-8 text-muted-foreground"
                 />
-                <p className="font-medium">Nessuna agenzia creata</p>
+                <p className="font-medium">Nessun cliente attivato</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Compila il modulo per attivare il primo cliente.
+                  Compila il modulo per attivare la prima agenzia cliente.
                 </p>
               </div>
             ) : (

@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
-import { LogIn } from "lucide-react";
+import { Building2, LogIn, ShieldCheck } from "lucide-react";
 
 import {
   accedi,
@@ -12,11 +12,23 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const statoIniziale: StatoAutenticazione = {};
 
-export function ModuloAccesso() {
+export type AreaAccesso = "agenzia" | "piattaforma";
+
+export function ModuloAccesso({
+  areaPreselezionata = "agenzia",
+}: {
+  areaPreselezionata?: AreaAccesso;
+}) {
   const [stato, azione, inCorso] = useActionState(accedi, statoIniziale);
+  const [areaAccesso, impostaAreaAccesso] = useState<AreaAccesso>(
+    areaPreselezionata,
+  );
+
+  const accessoPiattaforma = areaAccesso === "piattaforma";
 
   return (
     <form action={azione} className="space-y-5">
@@ -26,6 +38,33 @@ export function ModuloAccesso() {
         </Alert>
       ) : null}
 
+      <Tabs
+        value={areaAccesso}
+        onValueChange={(valore) => {
+          if (valore === "agenzia" || valore === "piattaforma") {
+            impostaAreaAccesso(valore);
+          }
+        }}
+      >
+        <TabsList className="grid h-11 w-full grid-cols-2" aria-label="Area di accesso">
+          <TabsTrigger value="agenzia" className="gap-2">
+            <Building2 aria-hidden="true" />
+            Agenzia
+          </TabsTrigger>
+          <TabsTrigger value="piattaforma" className="gap-2">
+            <ShieldCheck aria-hidden="true" />
+            Amministratore
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <input name="areaAccesso" type="hidden" value={areaAccesso} />
+
+      <p className="rounded-xl bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
+        {accessoPiattaforma
+          ? "Accesso personale riservato alla gestione delle agenzie clienti."
+          : "Accesso riservato agli amministratori e collaboratori delle agenzie."}
+      </p>
+
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input
@@ -34,7 +73,7 @@ export function ModuloAccesso() {
           type="email"
           autoComplete="email"
           inputMode="email"
-          placeholder="nome@agenzia.it"
+          placeholder={accessoPiattaforma ? "nome@tuodominio.it" : "nome@agenzia.it"}
           aria-invalid={Boolean(stato.errori?.email)}
           required
         />
@@ -72,7 +111,11 @@ export function ModuloAccesso() {
 
       <Button type="submit" size="lg" className="h-11 w-full" disabled={inCorso}>
         <LogIn aria-hidden="true" />
-        {inCorso ? "Accesso in corso…" : "Accedi"}
+        {inCorso
+          ? "Accesso in corso…"
+          : accessoPiattaforma
+            ? "Accedi come amministratore"
+            : "Accedi all’agenzia"}
       </Button>
     </form>
   );
