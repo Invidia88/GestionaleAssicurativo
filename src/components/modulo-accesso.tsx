@@ -71,7 +71,7 @@ export function ModuloAccesso({
           id="email"
           name="email"
           type="email"
-          autoComplete="email"
+          autoComplete="username"
           inputMode="email"
           placeholder={accessoPiattaforma ? "nome@tuodominio.it" : "nome@agenzia.it"}
           aria-invalid={Boolean(stato.errori?.email)}
@@ -117,6 +117,10 @@ export function ModuloAccesso({
             ? "Accedi come amministratore"
             : "Accedi all’agenzia"}
       </Button>
+
+      <p className="text-center text-xs text-muted-foreground">
+        Su questo dispositivo l’accesso resta attivo finché non scegli “Esci”.
+      </p>
     </form>
   );
 }

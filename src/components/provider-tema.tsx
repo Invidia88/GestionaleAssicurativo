@@ -18,7 +18,7 @@ function leggiTemaBrowser(): Tema {
 }
 
 function leggiTemaServer(): Tema {
-  return "light";
+  return "dark";
 }
 
 function sottoscriviTema(notifica: () => void) {

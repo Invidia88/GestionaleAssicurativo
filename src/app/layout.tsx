@@ -43,7 +43,7 @@ export default function RootLayout({
         <Script id="inizializza-tema" strategy="beforeInteractive">
           {`try {
             const tema = localStorage.getItem("gestionale-assicurativo-tema");
-            const modalitaScura = tema === "dark";
+            const modalitaScura = tema !== "light";
             document.documentElement.classList.toggle("dark", modalitaScura);
             document.documentElement.style.colorScheme = modalitaScura ? "dark" : "light";
           } catch {}`}
