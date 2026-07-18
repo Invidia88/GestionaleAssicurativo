@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { opzioniCookieSessione } from "@/lib/supabase/cookie";
+
 const percorsiPrivati = [
   "/dashboard",
   "/clienti",
@@ -19,8 +21,19 @@ function percorsoPrivato(pathname: string) {
   );
 }
 
+function rispostaPrivata(request: NextRequest) {
+  const risposta = NextResponse.next({ request });
+  risposta.headers.set("Cache-Control", "private, no-store, max-age=0");
+  risposta.headers.set("Pragma", "no-cache");
+  risposta.headers.set("Expires", "0");
+  return risposta;
+}
+
 export async function aggiornaSessione(request: NextRequest) {
-  let risposta = NextResponse.next({ request });
+  const richiedeSessione = percorsoPrivato(request.nextUrl.pathname);
+  let risposta = richiedeSessione
+    ? rispostaPrivata(request)
+    : NextResponse.next({ request });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,29 +43,43 @@ export async function aggiornaSessione(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookieDaSalvare) {
+        setAll(cookieDaSalvare, headerDaSalvare) {
           cookieDaSalvare.forEach(({ name, value }) => {
             request.cookies.set(name, value);
           });
 
-          risposta = NextResponse.next({ request });
+          risposta = richiedeSessione
+            ? rispostaPrivata(request)
+            : NextResponse.next({ request });
 
           cookieDaSalvare.forEach(({ name, value, options }) => {
             risposta.cookies.set(name, value, options);
           });
+
+          Object.entries(headerDaSalvare ?? {}).forEach(([nome, valore]) => {
+            risposta.headers.set(nome, valore);
+          });
         },
       },
+      cookieOptions: opzioniCookieSessione(),
     },
   );
 
   const { data } = await supabase.auth.getClaims();
   const autenticato = Boolean(data?.claims?.sub);
 
-  if (!autenticato && percorsoPrivato(request.nextUrl.pathname)) {
+  if (!autenticato && richiedeSessione) {
     const destinazione = request.nextUrl.clone();
     destinazione.pathname = "/login";
     destinazione.searchParams.set("motivo", "sessione-richiesta");
-    return NextResponse.redirect(destinazione);
+    const rispostaRedirect = NextResponse.redirect(destinazione);
+    risposta.cookies.getAll().forEach((cookie) => {
+      rispostaRedirect.cookies.set(cookie);
+    });
+    rispostaRedirect.headers.set("Cache-Control", "private, no-store, max-age=0");
+    rispostaRedirect.headers.set("Pragma", "no-cache");
+    rispostaRedirect.headers.set("Expires", "0");
+    return rispostaRedirect;
   }
 
   return risposta;

@@ -3,6 +3,8 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+import { opzioniCookieSessione } from "@/lib/supabase/cookie";
+
 export async function creaClientSupabaseServer() {
   const archivioCookie = await cookies();
 
@@ -25,6 +27,7 @@ export async function creaClientSupabaseServer() {
           }
         },
       },
+      cookieOptions: opzioniCookieSessione(),
     },
   );
 }

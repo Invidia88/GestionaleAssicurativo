@@ -39,6 +39,9 @@ const schemaNuovaPassword = z
     message: "Le password non coincidono",
   });
 
+const MESSAGGIO_ACCESSO_NEGATO =
+  "Email, password o area di accesso non corrette";
+
 function erroriCampi(errore: z.ZodError): StatoAutenticazione["errori"] {
   return errore.flatten().fieldErrors;
 }
@@ -59,14 +62,13 @@ export async function accedi(
 
   const supabase = await creaClientSupabaseServer();
   const { data: datiAccesso, error: erroreAccesso } =
-    await supabase.auth.signInWithPassword(validazione.data);
+    await supabase.auth.signInWithPassword({
+      email: validazione.data.email,
+      password: validazione.data.password,
+    });
 
-  if (erroreAccesso) {
-    const messaggio =
-      erroreAccesso.code === "email_not_confirmed"
-        ? "Conferma prima il tuo indirizzo email"
-        : "Email o password non corrette";
-    return { messaggio };
+  if (erroreAccesso || !datiAccesso.user) {
+    return { messaggio: MESSAGGIO_ACCESSO_NEGATO };
   }
 
   const proprietarioPiattaforma = emailAutorizzataPiattaforma(
@@ -78,19 +80,13 @@ export async function accedi(
       redirect("/piattaforma/agenzie");
     }
 
-    await supabase.auth.signOut();
-    return {
-      messaggio:
-        "Questo accesso è riservato all’amministratore della piattaforma",
-    };
+    await supabase.auth.signOut({ scope: "local" });
+    return { messaggio: MESSAGGIO_ACCESSO_NEGATO };
   }
 
   if (proprietarioPiattaforma) {
-    await supabase.auth.signOut();
-    return {
-      messaggio:
-        "Questo è un account amministratore piattaforma. Usa la sezione “Amministratore piattaforma”",
-    };
+    await supabase.auth.signOut({ scope: "local" });
+    return { messaggio: MESSAGGIO_ACCESSO_NEGATO };
   }
 
   const { data: profilo } = await supabase
@@ -101,10 +97,8 @@ export async function accedi(
     .maybeSingle();
 
   if (!profilo) {
-    await supabase.auth.signOut();
-    return {
-      messaggio: "L’account non è attivo oppure non è associato a un’agenzia",
-    };
+    await supabase.auth.signOut({ scope: "local" });
+    return { messaggio: MESSAGGIO_ACCESSO_NEGATO };
   }
 
   redirect("/dashboard");

@@ -57,8 +57,8 @@ export type ProfiloCorrente = {
 export const trovaProfiloCorrente = cache(async (): Promise<ProfiloCorrente | null> => {
   const supabase = await creaClientSupabaseServer();
   const { data: datiIdentita, error: erroreIdentita } =
-    await supabase.auth.getClaims();
-  const idUtente = datiIdentita?.claims?.sub;
+    await supabase.auth.getUser();
+  const idUtente = datiIdentita.user?.id;
 
   if (erroreIdentita || typeof idUtente !== "string") {
     return null;
