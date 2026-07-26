@@ -72,6 +72,13 @@ Le migration vengono applicate e collaudate prima su Staging. Production resta
 vuota e viene aggiornata solo con un'operazione distinta e autorizzata. Vedi
 [`docs/09-deploy-vercel.md`](docs/09-deploy-vercel.md).
 
+## Mantenimento dei progetti Supabase Free
+
+Il workflow GitHub Actions `Mantieni attivi i progetti Supabase` esegue ogni
+giorno una `SELECT id ... LIMIT 1` server-side su entrambi i progetti. Prima del
+primo avvio va configurato il token server-side e il secret GitHub omonimo;
+consulta [`docs/16-mantenimento-supabase-free.md`](docs/16-mantenimento-supabase-free.md).
+
 Non è necessario acquistare un dominio: Staging usa l’alias gratuito stabile
 `gestionale-assicurativo-git-staging-invidiaa88.vercel.app`. L’URL esatto va
 configurato come Site URL e con `/**` tra i Redirect URLs di Supabase Auth

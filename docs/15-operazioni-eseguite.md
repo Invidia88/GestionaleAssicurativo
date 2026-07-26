@@ -876,3 +876,24 @@ utenti e dati delle agenzie.
 La CLI ha emesso un warning non bloccante relativo alla cache sperimentale
 `pg-delta` dopo il push; lo storico migration remoto e le verifiche SQL
 confermano che le migration sono state applicate correttamente.
+
+## 2026-07-26
+
+### Obiettivo
+
+Ridurre il rischio di sospensione per inattività dei due progetti Supabase Free.
+
+### Implementazione
+
+- aggiunta una route server-side protetta da token, senza output di dati, che
+  esegue una sola query minima sul database collegato;
+- aggiunto un workflow GitHub Actions giornaliero che chiama Staging e
+  Production dall'esterno;
+- documentata la configurazione una tantum del token segreto e la verifica
+  manuale del workflow.
+
+### Nota
+
+La cadenza scelta è giornaliera, anziché ogni cinque giorni, perché Supabase
+valuta l'attività nell'intera settimana e indica che alcune query giornaliere
+sono normalmente sufficienti. Nessun dato applicativo viene creato o modificato.

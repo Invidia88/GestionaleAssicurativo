@@ -60,8 +60,8 @@
 
 ## In corso
 
-- promozione controllata del branch `staging` verso `main` e verifica del
-  deployment Production.
+- configurazione del secret condiviso GitHub/Vercel e prima esecuzione del job
+  giornaliero di attività Supabase.
 
 ## Da fare
 

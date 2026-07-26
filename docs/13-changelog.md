@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-26
+
+### Aggiunto
+
+- route server-side protetta per una query minima di attività Supabase;
+- workflow GitHub Actions giornaliero per Staging e Production;
+- documentazione della configurazione del token e della verifica manuale.
+
 ## 2026-07-17
 
 ### Aggiunto
