@@ -889,6 +889,8 @@ Ridurre il rischio di sospensione per inattività dei due progetti Supabase Free
   esegue una sola query minima sul database collegato;
 - aggiunto un workflow GitHub Actions giornaliero che chiama Staging e
   Production dall'esterno;
+- mantenuta la protezione Vercel della Preview, usando il bypass di automazione
+  ufficiale come secondo secret del workflow;
 - documentata la configurazione una tantum del token segreto e la verifica
   manuale del workflow.
 

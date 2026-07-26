@@ -32,14 +32,14 @@ il progetto fosse già sospeso.
 3. In GitHub → repository `Invidia88/GestionaleAssicurativo` → **Settings** →
    **Secrets and variables** → **Actions**, creare il repository secret
    `SUPABASE_KEEPALIVE_SECRET` con esattamente lo stesso valore.
-4. Dopo i deploy di Staging e Production, in GitHub → **Actions** →
+4. In Vercel, progetto `gestionale-assicurativo` → **Settings** →
+   **Deployment Protection** → **Protection Bypass for Automation**, creare un
+   secret dedicato al workflow. In GitHub creare anche il repository secret
+   `VERCEL_AUTOMATION_BYPASS_SECRET` con quel valore. Questo consente al job di
+   raggiungere Staging senza togliere il login Vercel dalla Preview.
+5. Dopo i deploy di Staging e Production, in GitHub → **Actions** →
    **Mantieni attivi i progetti Supabase** → **Run workflow**, eseguire una
    prova. Devono risultare entrambe le richieste verdi.
-
-Se Vercel protegge l'alias Preview con SSO, la chiamata Staging può fermarsi
-prima di raggiungere l'app. In tal caso si mantiene la protezione e si aggiunge
-nel workflow l'header di bypass Vercel usando un secondo secret, senza mai
-renderlo pubblico.
 
 ## Limiti e controllo
 

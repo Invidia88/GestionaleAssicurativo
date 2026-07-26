@@ -18,23 +18,29 @@ jobs:
       - name: Verifica configurazione
         env:
           SUPABASE_KEEPALIVE_SECRET: ${{ secrets.SUPABASE_KEEPALIVE_SECRET }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           test -n "$SUPABASE_KEEPALIVE_SECRET"
+          test -n "$VERCEL_AUTOMATION_BYPASS_SECRET"
 
       - name: Interroga Staging
         env:
           SUPABASE_KEEPALIVE_SECRET: ${{ secrets.SUPABASE_KEEPALIVE_SECRET }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           URL: https://gestionale-assicurativo-git-staging-invidiaa88.vercel.app/api/sistema/attivita
         run: |
           curl --fail --silent --show-error --retry 2 --retry-delay 5 \
             --connect-timeout 10 --max-time 30 \
+            -H "x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET" \
             -H "Authorization: Bearer $SUPABASE_KEEPALIVE_SECRET" "$URL"
 
       - name: Interroga Production
         env:
           SUPABASE_KEEPALIVE_SECRET: ${{ secrets.SUPABASE_KEEPALIVE_SECRET }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           URL: https://gestionaleassicurativo.vercel.app/api/sistema/attivita
         run: |
           curl --fail --silent --show-error --retry 2 --retry-delay 5 \
             --connect-timeout 10 --max-time 30 \
+            -H "x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET" \
             -H "Authorization: Bearer $SUPABASE_KEEPALIVE_SECRET" "$URL"
