@@ -7,8 +7,10 @@ database ogni giorno sono normalmente sufficienti.
 
 ## Implementazione
 
-Il workflow GitHub Actions `.github/workflows/mantieni-supabase-attivo.yml` si
-avvia ogni giorno alle 08:17 UTC e chiama entrambe le applicazioni Vercel:
+Il workflow GitHub Actions `.github/workflows/mantieni-supabase-attivo.yml`
+esegue tre chiamate al giorno, alle 07:17, 13:17 e 19:17 UTC, verso entrambe le
+applicazioni Vercel. La distribuzione nella giornata rispecchia meglio il
+criterio di Supabase di alcune richieste giornaliere:
 
 - Staging: `gestionale-assicurativo-git-staging-invidiaa88.vercel.app`;
 - Production: `gestionaleassicurativo.vercel.app`.
@@ -44,7 +46,7 @@ il progetto fosse già sospeso.
 ## Limiti e controllo
 
 - GitHub può ritardare o saltare un job pianificato durante picchi di carico;
-  per questo il job evita l'inizio dell'ora e riprova due volte.
+  per questo ogni job evita l'inizio dell'ora e riprova due volte.
 - Per repository pubblici, GitHub disabilita i workflow pianificati dopo 60
   giorni senza attività nel repository: basta riabilitarlo dalla pagina
   Actions. Il pulsante manuale `Run workflow` resta il controllo immediato.

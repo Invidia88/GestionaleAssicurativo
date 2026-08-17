@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-17
+
+### Corretto
+
+- pianificazione del keepalive Supabase portata da una a tre query distribuite
+  al giorno dopo che 23 esecuzioni giornaliere riuscite non sono state valutate
+  come attività sufficiente dal piano Free.
+
 ## 2026-07-26
 
 ### Aggiunto

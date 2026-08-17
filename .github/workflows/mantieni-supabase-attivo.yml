@@ -2,8 +2,9 @@ name: Mantieni attivi i progetti Supabase
 
 on:
   schedule:
-    # 09:17 Europe/Rome in ora solare. L'orario non è critico: conta la query.
-    - cron: "17 8 * * *"
+    # Tre richieste distribuite nella giornata: una sola non è risultata
+    # sufficiente per il criterio di attività dei progetti Supabase Free.
+    - cron: "17 7,13,19 * * *"
   workflow_dispatch:
 
 permissions:

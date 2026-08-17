@@ -899,3 +899,14 @@ Ridurre il rischio di sospensione per inattività dei due progetti Supabase Free
 La cadenza scelta è giornaliera, anziché ogni cinque giorni, perché Supabase
 valuta l'attività nell'intera settimana e indica che alcune query giornaliere
 sono normalmente sufficienti. Nessun dato applicativo viene creato o modificato.
+
+## 2026-08-17
+
+### Verifica e correzione
+
+- consultate 23 esecuzioni GitHub Actions, tutte completate con successo, inclusa
+  quella del giorno corrente;
+- ricevuto comunque l'avviso di sospensione imminente per Staging;
+- aumentata la frequenza da una a tre query distribuite al giorno, poiché una
+  singola richiesta giornaliera non è risultata sufficiente per l'euristica del
+  piano Supabase Free.
